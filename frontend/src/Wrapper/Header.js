@@ -3,13 +3,9 @@ import logo_TTM_vert from '../media/images/logos/logo_TTM_vert.png';
 import favicon_TTM from '../media/images/logos/favicon_TTM.png';
 // import '../App.css';
 import './Header.css';
-import { Routes, Route } from 'react-router-dom';
-// import Accueil from './pages/Accueil';
-// import Compte from './pages/Compte';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 
 

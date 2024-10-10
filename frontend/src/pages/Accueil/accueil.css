@@ -1,0 +1,37 @@
+.msgAccueil {
+    background-color: rgb(255, 255, 255);
+    opacity: 0.7;
+    min-height: 300px; /* Hauteur minimale de la section */
+    height: 100%; /* La section occupe toute la hauteur de la fenêtre */
+    width: 45vw;
+    padding: 20px; /* Espace uniforme autour de tout le contenu */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /*height: 100%; /*Assurez-vous que la section a une hauteur*/
+
+    /*text-align: center;
+    margin: 0 auto; /* centrer horizontalement l'élément section si nécessaire */
+}
+
+.msgAccueil h1, .msgAccueil h2, .msgAccueil h3 {
+    margin: 20px 0; /* Espacement uniforme au-dessus et en dessous de chaque titre */
+}
+
+.msgAccueil h1 {
+    /*margin-top: 5px; /* Réduire l'espace au-dessus de h1 */
+    /*margin-bottom: 10px; /* Espace entre h1 et h2 */
+    color: #FF165D;
+}
+
+.msgAccueil h2 {
+    /*margin-bottom: 30px; /* Espace entre h2 et h3 */
+}
+
+.msgAccueil h3 {
+    /*margin-bottom: 0; /* Pas d'espace après le dernier titre, sauf si vous voulez en ajouter */
+    color: #71c920;
+}
