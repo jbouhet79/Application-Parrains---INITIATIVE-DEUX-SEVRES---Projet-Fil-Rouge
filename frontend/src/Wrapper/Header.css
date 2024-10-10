@@ -1,0 +1,60 @@
+.header {
+    height: 20vh;
+    width: 100%;
+    padding-top: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: rgb(7, 7, 7);
+}
+
+.menu {
+    font-size: medium;
+    color: rgb(7, 7, 7);
+    text-decoration-line: none;
+
+
+}
+
+.bouton {
+    max-height: 2vh;
+}
+
+.logo {
+    max-height: 8vh;
+    width: auto; /* La largeur s'ajustera automatiquement pour garder les proportions */
+    object-fit: contain; /* Le logo sera contenu dans le header sans être étiré */
+}
+
+.favicon {
+    max-height: 6vh;
+    width: auto; /* La largeur s'ajustera automatiquement pour garder les proportions */
+    object-fit: contain; /* Le logo sera contenu dans le header sans être étiré */
+}
+
+.favicon-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 0%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-bottom: 1%; /* Espace sous chaque logo */
+}
+
+.line {
+    /*width: 80%; /* Elle occupe 80% de la largeur disponible */
+    /*max-width: 600px; /* Mais ne dépassera jamais 600px */
+    /*margin: 10px auto 0 ; /* Espace au-dessus de la ligne */
+    border-top: 3px solid #71c920; /* Vous pouvez changer la couleur et l'épaisseur */
+}
+
