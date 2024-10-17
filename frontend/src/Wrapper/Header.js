@@ -47,13 +47,13 @@ const Header = () => {
 
                     </Col>
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
-                            <Link className='menu' to={"/profils"}>Profils disponibles</Link>
+                            <Link className='menu text-nowrap' to={"/profils"}>Profils disponibles</Link>
                     </Col>
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
                             <Link className='menu' to={"/messages"}>Messages</Link>
                     </Col>
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
-                            <Link className='menu' to={"/matchs"}>Mes Matchs</Link>
+                            <Link className='menu text-nowrap' to={"/matchs"}>Mes Matchs</Link>
                     </Col>
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
                             <Link className='menu' to={"/ressources"}>Ressources</Link>
@@ -71,7 +71,7 @@ const Header = () => {
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
                         <div className='bouton'>
                             <Link to="/creationCompte">
-                                <button  type="button" class=" btn btn-dark btn-sm" >Créer un compte</button> 
+                                <button  type="button" class=" btn btn-dark btn-sm text-nowrap" >Créer un compte</button> 
                             </Link>
                         </div>
                     </Col>

@@ -1,0 +1,52 @@
+.form-label {
+    background-color: #e7ffcc;
+    padding: 5px 50px 5px 10px;
+    margin-bottom: 0px;
+    border-radius: 5px;
+}
+
+.titre{
+    margin-top: 15px;
+    max-height: 50px;
+}
+.champ {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.text {
+    color: white;
+    font-size: xx-large;
+    background-color: #FF165D;
+    padding: 5px 40px 10px 40px;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.bouton-envoyer {
+    display: flex;
+    align-items: center;
+    /* justify-content: end; */
+    /* justify-items: end; */
+    color: white;
+    border: none;
+    background-color: #FF165D;
+    padding: 4px 15px 6px 20px;
+    border-radius: 10px;
+    font-size: medium;
+}
+
+.custom-height {
+    height: 50px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+}
+
+.img-send {
+    padding-right: 0px;
+    padding-left: 10px;
+    height: 15px;
+}
+
+.position-bouton {
+    display: flex;
+    justify-content: end;
+}
