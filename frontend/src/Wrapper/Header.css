@@ -1,5 +1,5 @@
 .header {
-    height: 20vh;
+    height: 18vh;
     width: 100%;
     padding-top: 1%;
     padding-left: 2%;
@@ -13,11 +13,9 @@
 }
 
 .menu {
-    font-size: medium;
+    font-size: 0.95rem;
     color: rgb(7, 7, 7);
     text-decoration-line: none;
-
-
 }
 
 .bouton {
