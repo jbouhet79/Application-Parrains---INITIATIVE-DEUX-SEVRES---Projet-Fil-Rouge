@@ -9,8 +9,7 @@ on:
 
 # Définir les permissions nécessaires pour ce workflow
 permissions:
-  contents: write
-  # accès à d'autres permissions via crtl+espace pour voir les possibilités
+  contents: write # accès à d'autres permissions via crtl+espace pour voir les possibilités
 
 jobs:
   # Job pour obtenir la version
