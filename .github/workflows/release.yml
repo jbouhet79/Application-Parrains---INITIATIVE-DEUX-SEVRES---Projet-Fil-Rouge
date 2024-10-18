@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     services:
-     postgres:
+     db:
        image: postgres
        env:
          POSTGRES_DB: ttm
