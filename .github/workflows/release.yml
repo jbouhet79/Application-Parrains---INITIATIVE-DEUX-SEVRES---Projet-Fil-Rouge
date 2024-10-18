@@ -37,6 +37,12 @@ jobs:
       # Installer Node
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.4
+      - name: Check for package.json
+        run: |
+          if [ ! -f /home/runner/work/INITIATIVE-DEUX-SEVRES-Trouve-Ton-Match/INITIATIVE-DEUX-SEVRES-Trouve-Ton-Match/package.json ]; then
+            echo "package.json not found!"
+            exit 1
+          fi
       # Installation des dépendances
       - name: Install dependencies
         run: npm install
