@@ -89,6 +89,7 @@ jobs:
   test:
     name: Spring test
     runs-on: ubuntu-latest
+    needs: [get-version, build-front, build-back ]
     continue-on-error: true
     services:
      postgres:
@@ -127,7 +128,7 @@ jobs:
       - name: Download frontend artifacts
         uses: actions/download-artifact@v4.1.8
         with:
-          name: frontend #nma identique à celui uploader
+          name: frontend #name identique à celui uploader
           path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
       # Compresser les fichiers artefacts
       - name: Zip files artifacts
