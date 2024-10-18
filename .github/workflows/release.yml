@@ -79,7 +79,6 @@ jobs:
         env: 
           VERSION: "${{ needs.get-version.outputs.version }}"
         run: chmod +x gradlew && ./gradlew bootjar
-      - run: ls -lia build/
       - name: Upload backend artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -89,14 +88,13 @@ jobs:
   test:
     name: Spring test
     runs-on: ubuntu-latest
-    needs: [get-version, build-front, build-back ]
     continue-on-error: true
     services:
      postgres:
        image: postgres
        env:
+         POSTGRES_DB: ttm
          POSTGRES_USER: postgres
-         POSTGRES_DB: forknow
          POSTGRES_PASSWORD: postgres
        # Set health checks to wait until postgres has started
        options: >-
@@ -114,9 +112,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build with Gradle
-        run: chmod +x gradlew && ./gradlew test
-      - run: ls -lia build/
+      - name: Run Tests
+        env:
+         SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ttm
+         SPRING_DATASOURCE_USERNAME: postgres
+         SPRING_DATASOURCE_PASSWORD: postgres
+         run: ./gradlew test
       
   # Job pour créer une release
   release:
@@ -124,26 +125,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-version, build-front, build-back ]
     steps:
-      # Télécharger les artefacts du frontend
-      - name: Download frontend artifacts
+      # Télécharger les artefacts du frontend et du backend
+      - name: Download artifacts
         uses: actions/download-artifact@v4.1.8
         with:
-          name: frontend #name identique à celui uploader
           path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
+          # automatiquement dans artifacts/frontend pour le front
+          # et artifacts/backend pour le back (car les deux artifacts sont chacun dans un fichier frontend et backend)
       # Compresser les fichiers artefacts
       - name: Zip files artifacts
-        run: zip -r artifacts.zip artifacts/
+        run: zip -r artifacts.zip artifacts/frontend/
 
-      # Télécharger les artefacts du backend
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: backend #nma identique à celui uploader
-          path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
-      # Compresser les fichiers artefacts
-      - name: Zip files artifacts
-        run: zip -r artifacts.zip artifacts/
-        
       # Créer une release GitHub
       - name: Create Github Release
         env: # définition des varialbles d'environnement utiles pour la suite (plus simples à utliser)
@@ -156,9 +148,9 @@ jobs:
         run: |
           echo "$CHANGELOG" > changelog.md 
           if [ "$PRERELEASE" == "true" ]; then
-            gh release create --prerelease --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip
+            gh release create --prerelease --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip artifacts/backend/*
           else
-            gh release create --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip
+            gh release create --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip artifacts/backend/*
           fi
     
     
