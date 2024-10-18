@@ -37,6 +37,19 @@ jobs:
       # Installer Node
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.4
+      # Installation des dépendances
+      - name: Install dependencies
+        run: npm install
+      # Construction du projet React
+      - name: Build
+        run: npm run build
+      # Sauvegarde des artifacts du front
+      - name: Upload front artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fronckend
+          path: build/
+        
         
   build-back:
     name: Java build
@@ -46,26 +59,61 @@ jobs:
       - get-version # à besoin que le Job get-version soit fini pour commencer le build
     steps:
       # Étape pour vérifier le code source
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       # Installer Java
       - name: setup java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 17
+      # installation de la version appropriée de Gradle 
+      # et la configuration de l’environnement pour que les commandes Gradle puissent être exécutées     
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Checkout
-        uses: actions/checkout@v4
+      # Construction du bask avec Gradle
       - name: Build with Gradle
         # variable d'environnement pour que gradle en ait connaissance
         env: 
           VERSION: "${{ needs.get-version.outputs.version }}"
         run: chmod +x gradlew && ./gradlew bootjar
-      - run: ls -lia build/libs
-      - uses: actions/upload-artifact@v4
+      - run: ls -lia build/
+      - name: Upload backend artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: spring
-          path: build/libs
+          name: backend
+          path: build/
+
+          # Job pour créer une release
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [get-version, build-front, build-back ]
+    steps:
+      # Télécharger les artefacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: spring #nma identique à celui uploader
+          path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
+      # Compresser les fichiers artefacts
+      - name: Zip files artifacts
+        run: zip -r artifacts.zip dist/*
+      # Créer une release GitHub
+      - name: Create Github Release
+        env: # définition des varialbles d'environnement utiles pour la suite (plus simples à utliser)
+          PRERELEASE: ${{ needs.get-version.outputs.is-prerelease }}
+          CHANGELOG: ${{ needs.get-version.outputs.changelogs }} # détail des actions
+          VERSION: "${{ needs.get-version.outputs.version }}"
+          REPO: "${{ github.repository }}"
+          COMMIT: "${{ github.sha }}" # id du dernier commit
+          GH_TOKEN: "${{ github.token }}"
+        run: |
+          echo "$CHANGELOG" > changelog.md 
+          if [ "$PRERELEASE" == "true" ]; then
+            gh release create --prerelease --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip
+          else
+            gh release create --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip
+          fi
     
     
