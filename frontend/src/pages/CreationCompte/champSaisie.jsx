@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import './creationCompte.css';
 
 
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/;
-const msgRegex = /^[a-zA-Z0-9À-ÿ\- ]{20,350}$/;
+// const msgRegex = /^[a-zA-Z0-9À-ÿ\- ]{20,350}$/;
 
 export function ChampSaisie({setValue, label}) {
 
