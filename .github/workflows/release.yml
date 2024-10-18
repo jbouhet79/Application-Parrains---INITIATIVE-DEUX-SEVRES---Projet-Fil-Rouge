@@ -37,3 +37,18 @@ jobs:
       # Installer Node
       - name: Setup Node.js environment
         uses: actions//setup-node@v4.0.4
+        
+  build-back:
+    name: Java build
+    runs-on: ubuntu-latest
+    if: ${{ needs.get-version.outputs.will-release == 'true' }}
+    needs:
+      - get-version # à besoin que le Job get-version soit fini pour commencer le build
+    steps:
+      # Étape pour vérifier le code source
+      - uses: actions/checkout@v4
+      # Installer Java
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.4.0
+    
+    
