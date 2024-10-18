@@ -37,25 +37,22 @@ jobs:
       # Installer Node
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.4
-      - name: Check for package.json
-        run: |
-          if [ ! -f /home/runner/work/INITIATIVE-DEUX-SEVRES-Trouve-Ton-Match/INITIATIVE-DEUX-SEVRES-Trouve-Ton-Match/package.json ]; then
-            echo "package.json not found!"
-            exit 1
-          fi
       # Installation des dépendances
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install
       # Construction du projet React
       - name: Build
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
       # Sauvegarde des artifacts du front
       - name: Upload front artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fronckend
-          path: build/
-        
+          name: frontend
+          path: frontend/build/
         
   build-back:
     name: Java build
@@ -96,15 +93,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-version, build-front, build-back ]
     steps:
-      # Télécharger les artefacts
-      - name: Download artifacts
+      # Télécharger les artefacts du frontend
+      - name: Download frontend artifacts
         uses: actions/download-artifact@v4.1.8
         with:
-          name: spring #nma identique à celui uploader
+          name: frontend #nma identique à celui uploader
           path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
       # Compresser les fichiers artefacts
       - name: Zip files artifacts
-        run: zip -r artifacts.zip dist/*
+        run: zip -r artifacts.zip artifacts/
+
+      # Télécharger les artefacts du backend
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: backend #nma identique à celui uploader
+          path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
+      # Compresser les fichiers artefacts
+      - name: Zip files artifacts
+        run: zip -r artifacts.zip artifacts/
+        
       # Créer une release GitHub
       - name: Create Github Release
         env: # définition des varialbles d'environnement utiles pour la suite (plus simples à utliser)
