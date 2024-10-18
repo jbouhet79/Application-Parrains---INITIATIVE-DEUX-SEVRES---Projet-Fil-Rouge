@@ -1,10 +1,10 @@
 import Wrapper from '../../Wrapper'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ChampSaisie } from './champSaisie';
 import './creationCompte.css';
 import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
+// import Row from 'react-bootstrap/esm/Row';
+// import Col from 'react-bootstrap/esm/Col';
 import send from '../../media/images/logos/send_blanc.png';
 
 
@@ -48,7 +48,7 @@ const CreationCompte = () => {
     // const [validMsg, setValidMsg] = useState(false);
     // const [focusMsg, setFocusMsg] = useState(false);
 
-    const [errMsg, setErrMsg] = useState([{}]);
+    // const [errMsg, setErrMsg] = useState([{}]);
 
     // useEffect(() => {
     //   nameRef.current.focus()
@@ -97,11 +97,11 @@ const CreationCompte = () => {
     //     console.log("log email de ma fonction : ", email);
     // }
 
-    const addMsgError = (msgParam, focusSeter, validElement) => {
-        focusSeter(false)
-        const newMsg = validElement ? "" : msgParam;
-        setErrMsg(newMsg)
-    }
+    // const addMsgError = (msgParam, focusSeter, validElement) => {
+    //     focusSeter(false)
+    //     const newMsg = validElement ? "" : msgParam;
+    //     setErrMsg(newMsg)
+    // }
 
     const handleSubmit = (e) => {
         e.preventDefault();

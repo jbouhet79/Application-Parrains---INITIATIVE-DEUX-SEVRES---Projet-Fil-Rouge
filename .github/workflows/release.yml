@@ -1,0 +1,156 @@
+# Déclenche le workflow sur les pushs vers les branches 'main' et 'beta'
+name: Release
+on:
+  push:
+    branches:
+      - main
+      - beta
+
+
+# Définir les permissions nécessaires pour ce workflow
+permissions:
+  contents: write # accès à d'autres permissions via crtl+espace pour voir les possibilités
+
+jobs:
+  # Job pour obtenir la version
+  get-version:
+    # Utilise (importe) un workflow externe pour obtenir la version
+    # github-actions est un repo communautaire
+    uses: shiipou/github-actions/.github/workflows/get-version.yml@main
+    with: # paramètres à rajouter au workflow générique récupéré
+      release-branches: '^(main)$'
+      prerelease-branches: '^(beta)$'
+
+  # Job pour construire le projet Spring
+  build-front:
+    # les names sont les noms visibles dans la release Github
+    name: React build
+    runs-on: ubuntu-latest # utilise un runner linux (possible aussi Mac, Windows)
+    # Condition pour exécuter ce job seulement si une release est détectée
+    if: ${{ needs.get-version.outputs.will-release == 'true' }}
+    needs:
+      - get-version # à besoin que le Job get-version soit fini pour commencer le build
+    steps:
+      # Étape pour vérifier le code source
+      - uses: actions/checkout@v4
+      # Installer Node
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.4
+      # Installation des dépendances
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+      # Construction du projet React
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+      # Sauvegarde des artifacts du front
+      - name: Upload front artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend
+          path: frontend/build/
+        
+  build-back:
+    name: Java build
+    runs-on: ubuntu-latest
+    if: ${{ needs.get-version.outputs.will-release == 'true' }}
+    needs:
+      - get-version # à besoin que le Job get-version soit fini pour commencer le build
+    steps:
+      # Étape pour vérifier le code source
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Installer Java
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      # installation de la version appropriée de Gradle 
+      # et la configuration de l’environnement pour que les commandes Gradle puissent être exécutées     
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      # Construction du bask avec Gradle
+      - name: Build with Gradle
+        # variable d'environnement pour que gradle en ait connaissance
+        env: 
+          VERSION: "${{ needs.get-version.outputs.version }}"
+        run: chmod +x gradlew && ./gradlew bootjar
+      - name: Upload backend artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend
+          path: build/libs/*.jar
+
+  test:
+    name: Spring test
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    services:
+     db:
+       image: postgres
+       env:
+         POSTGRES_DB: ttm
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: postgres
+       # Set health checks to wait until postgres has started
+       options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Tests
+        env:
+         SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ttm
+         SPRING_DATASOURCE_USERNAME: postgres
+         SPRING_DATASOURCE_PASSWORD: postgres
+        run: chmod +x gradlew && ./gradlew test
+      
+  # Job pour créer une release
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [get-version, build-front, build-back ]
+    steps:
+      # Télécharger les artefacts du frontend et du backend
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          path: artifacts/ # dossier dans lequel est downloader l'artifact (peut être différent de celui du upload)
+          # automatiquement dans artifacts/frontend pour le front
+          # et artifacts/backend pour le back (car les deux artifacts sont chacun dans un fichier frontend et backend)
+      # Compresser les fichiers artefacts
+      - name: Zip files artifacts
+        run: zip -r artifacts.zip artifacts/frontend/
+
+      # Créer une release GitHub
+      - name: Create Github Release
+        env: # définition des varialbles d'environnement utiles pour la suite (plus simples à utliser)
+          PRERELEASE: ${{ needs.get-version.outputs.is-prerelease }}
+          CHANGELOG: ${{ needs.get-version.outputs.changelogs }} # détail des actions
+          VERSION: "${{ needs.get-version.outputs.version }}"
+          REPO: "${{ github.repository }}"
+          COMMIT: "${{ github.sha }}" # id du dernier commit
+          GH_TOKEN: "${{ github.token }}"
+        run: |
+          echo "$CHANGELOG" > changelog.md 
+          if [ "$PRERELEASE" == "true" ]; then
+            gh release create --prerelease --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip artifacts/backend/*
+          else
+            gh release create --repo $REPO --target $COMMIT -F changelog.md "v$VERSION" artifacts.zip artifacts/backend/*
+          fi
+    
+    

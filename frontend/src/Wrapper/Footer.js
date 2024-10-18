@@ -4,13 +4,13 @@ import tiktok from '../media/images/logos/tic-tac.png';
 import linkedin from '../media/images/logos/linkedin.png';
 // import '../App.css';
 import './Footer.css';
-import { Routes, Route } from 'react-router-dom';
+// import { Routes, Route } from 'react-router-dom';
 // import Accueil from '../pages/Accueil/accueil';
 // import Compte from '../pages/Compte/compte';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 
 const Footer = () => {
