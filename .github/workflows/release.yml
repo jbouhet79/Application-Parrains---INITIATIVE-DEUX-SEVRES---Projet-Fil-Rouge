@@ -43,7 +43,8 @@ jobs:
           npm install
       # Construction du projet React
       - name: Build
-        run: 
+        run: |
+          cd frontend
           npm run build
       # Sauvegarde des artifacts du front
       - name: Upload front artifacts
