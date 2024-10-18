@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - beta
+      - 62-conception-de-la-ci
 
 # Définir les permissions nécessaires pour ce workflow
 permissions:
@@ -19,7 +20,7 @@ jobs:
     uses: shiipou/github-actions/.github/workflows/get-version.yml@main
     with: # paramètres à rajouter au workflow générique récupéré
       release-branches: '^(main)$'
-      prerelease-branches: '^(beta)$'
+      prerelease-branches: '^(beta|62-conception-de-la-ci)$'
 
   # Job pour construire le projet Spring
   build-front:
