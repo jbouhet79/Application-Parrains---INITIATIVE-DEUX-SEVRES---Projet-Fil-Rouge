@@ -1,0 +1,28 @@
+.bouton-suivant {
+    display: flex;
+    align-items: center;
+    color:#FF165D;
+    border: 3px solid #FF165D;
+    border-color: #FF165D;
+    background-color: white;
+    padding: 4px 15px 6px 15px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+
+.error-input {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: red;
+    border: 3px solid red;
+    border-radius: 10px;
+    padding: 4px 15px 6px 60px;
+    margin-right: 50px;
+    width: auto;
+    box-sizing: border-box;
+    font-size: 1em; 
+    font-weight: 600;
+
+}
+
