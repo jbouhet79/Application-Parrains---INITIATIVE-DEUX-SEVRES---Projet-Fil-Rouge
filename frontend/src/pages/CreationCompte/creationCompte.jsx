@@ -1,135 +1,201 @@
 import Wrapper from '../../Wrapper'
 import { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import { ChampSaisie } from './champSaisie';
 import './creationCompte.css';
 import Container from 'react-bootstrap/esm/Container';
-// import Row from 'react-bootstrap/esm/Row';
-// import Col from 'react-bootstrap/esm/Col';
 import send from '../../media/images/logos/send_blanc.png';
 
-
-
-// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/;
-// const msgRegex = /^[a-zA-Z0-9À-ÿ\- ]{20,350}$/;
+const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/; // minimum 2 caractères pour les autres champs
+const nomRegex = /^[A-ZÀ-ÿ\- ]{2,}$/; // NOM en MAJUSCULES
+const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const CreationCompte = () => {
 
 
-    // d'abord le state
-    // les ...
-    // puis les render
+    // Initialisation des états des valeurs de utilisateurDto
+    const [utilisateurDto, setUtilisateurDto] = useState({
+        idUtilisateur: '',
+        nomUtilisateur: '',
+        prenomUtilisateur: '',
+        entrepriseUtilisateur: '',
+        plateformeUtilisateur: '',
+        codeUtilisateur: '',
+        type: ''
+    });
 
-    const [nom, setNom] = useState('');
-    const [validNom, setValidNom] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const location = useLocation(); // Ce hook permet d’accéder à l’objet location qui représente l’URL actuelle de l’application 
 
-
-    const [prenom, setPrenom] = useState('');
-    const [validPrenom, setValidPrenom] = useState(false);
-
-    const [entreprise, setEntreprise] = useState('');
-    const [validEntreprise, setValidEntreprise] = useState(false);
-
-    const [plateforme, setPlateforme] = useState('');
-    const [validPlateforme, setValidPlateforme] = useState(false);
-
-    const [code, setCode] = useState('');
-    const [validCode, setValidCode] = useState(false);
-
-    // const [email, setEmail] = useState('');
-    // const [validEmail, setValidEmail] = useState(false);
-    // const [focusEmail, setFocusEmail] = useState(false);
-
-    // const [object, setObject] = useState('');
-    // const [validObject, setValidObject] = useState(false);
-    // const [focusObject, setFocusObject] = useState(false);
-
-    // const [msg, setMsg] = useState('');
-    // const [validMsg, setValidMsg] = useState(false);
-    // const [focusMsg, setFocusMsg] = useState(false);
-
-    // const [errMsg, setErrMsg] = useState([{}]);
-
-    // useEffect(() => {
-    //   nameRef.current.focus()
-    // }, [])
-    // met le cursueur par défaut dans le champ de saisie
-
-    // useEffect(()=>{
-    //     emailRef.current.focus()
-    //     // met le focus (entoure le rouge) sur l'email lors du chargement de la page avec emailRef et useEffect
-    // })
-
+    // Réinitialisation des états des valeurs de utilisateurDto
+    // lorsque le composant est monté (c’est-à-dire lorsque la page est chargée ou actualisée).
     useEffect(() => {
-        const result = otherRegex.test(nom)
-        setValidNom(result)
-    }, [nom])
+        setUtilisateurDto({
+            idUtilisateur: '',
+            nomUtilisateur: '',
+            prenomUtilisateur: '',
+            entrepriseUtilisateur: '',
+            plateformeUtilisateur: '',
+            codeUtilisateur: '',
+            type: ''
+        });
+    
+        setIsSubmitted(false);
+    }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
 
-    useEffect(() => {
-        const result = otherRegex.test(prenom)
-        setValidPrenom(result)
-    }, [prenom])
+    const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const result = otherRegex.test(entreprise)
-        setValidEntreprise(result)
-    }, [entreprise])
+    const validate = () => {
+        const newErrors = {};
+    
+        if (!utilisateurDto.nomUtilisateur) newErrors.nomUtilisateur = 'Le nom est requis';
+        if (!utilisateurDto.prenomUtilisateur) newErrors.prenomUtilisateur = 'Le prénom est requis';
+        if (!utilisateurDto.entrepriseUtilisateur) newErrors.entrepriseUtilisateur = 'L\'entreprise est requise';
+        if (!utilisateurDto.plateformeUtilisateur) newErrors.plateformeUtilisateur = 'La plateforme est requise';
+        if (!utilisateurDto.codeUtilisateur) newErrors.codeUtilisateur = 'Le code d\'accès est requis';
+        if (!utilisateurDto.type) newErrors.type = 'Le type de profil est requis';
+    
+        return newErrors;
+    };
 
-    useEffect(() => {
-        const result = otherRegex.test(plateforme)
-        setValidPlateforme(result)
-    }, [plateforme])
 
-    useEffect(() => {
-        const result = otherRegex.test(code)
-        setValidCode(result)
-    }, [code])
+    // Met à jour dynamiquement les propriétés de utilisateurDto à chaque changer de valeur
+    const handleChange = (name, value) => {
+        setUtilisateurDto({
+            ...utilisateurDto, // L’opérateur de décomposition (...utilisateurDto) est utilisé pour copier toutes les propriétés existantes de utilisateurDto.
+            [name]: value
+        });
 
-    // useEffect(() => {
-    //   const result = emailRegex.test(email)
-    //   // vérif de la saisie de l'email
-    //   setValidEmail(result)
-    //   console.log("log email de mon hook : ", email);
-    // }, [email])
+        // Validation des champs
+        const newErrors = { ...errors };
+        if (value.trim() === '') {
+            newErrors[name] = 'Ce champ est requis';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+        };
 
-    // const handleChange = ()=>{
-    //     setEmail(emailRef.current.value)
-    //     console.log("log email de ma fonction : ", email);
-    // }
 
-    // const addMsgError = (msgParam, focusSeter, validElement) => {
-    //     focusSeter(false)
-    //     const newMsg = validElement ? "" : msgParam;
-    //     setErrMsg(newMsg)
-    // }
 
+    // Envoie des données de l’utilisateur au serveur, reception de la réponse contenant l’ID de l’utilisateur créé, et mise à jour l’état local avec cet ID. 
+    // Cela permet de garder l’interface utilisateur synchronisée avec les données du serveur.
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        fetch('http://localhost:8080/creationCompte/createutilisateur', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(utilisateurDto)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Utilisateur créé:', data);
+
+                setUtilisateurDto({
+                    ...utilisateurDto,
+                    idUtilisateur: data.idUtilisateur // Mettre à jour l'ID dans utilisateurDto
+                });
+
+                setIsSubmitted(true); // Masquer le bouton après l'envoi
+            })
+
+            .catch(error => {
+                console.error('Erreur lors de la soumission du formulaire!', error);
+            });
     }
 
     return (
         <Wrapper>
             <div className='titre'>
-                <h1 className='text'>creation compte</h1>;
+                <h1 className='text'>creation compte</h1>
             </div>
             <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
-                <ChampSaisie setValue={setNom} label="Nom :"></ChampSaisie>
-                <ChampSaisie setValue={setPrenom} label="Prenom :"></ChampSaisie>
-                <ChampSaisie setValue={setEntreprise} label="Entreprise (entreprise représentée en tant que membre d’Initiative Deux-Sèvres :"></ChampSaisie>
-                <ChampSaisie setValue={setPlateforme} label="Plateforme Initiative :"></ChampSaisie>
-                <ChampSaisie setValue={setCode} label="Code d'accès :"></ChampSaisie>
+                
+                {errors.prenomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
+                <ChampSaisie
+                    setValue={(value) => handleChange('nomUtilisateur', value)}
+                    label="Nom :"
+                    name="nomUtilisateur"
+                    value={utilisateurDto.nomUtilisateur}
+                    regex={nomRegex}
+                />
+                
+                {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
+                <ChampSaisie  setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur"  value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
+                
+                {errors.entrepriseUtilisateur && <div className="error">{errors.entrepriseUtilisateur}</div>}
+                <ChampSaisie  setValue={(value) => handleChange('entrepriseUtilisateur', value)}  value={utilisateurDto.entrepriseUtilisateur} label="Entreprise (entreprise représentée en tant que membre d’Initiative Deux-Sèvres) :" name="entrepriseUtilisateur" regex={otherRegex}  ></ChampSaisie>
+                
+                {errors.plateformeUtilisateur && <div className="error">{errors.plateformeUtilisateur}</div>}
+                <ChampSaisie  setValue={(value) => handleChange('plateformeUtilisateur', value)}  value={utilisateurDto.plateformeUtilisateur} label="Plateforme Initiative :" name="plateformeUtilisateur"  regex={otherRegex}  ></ChampSaisie>
+                
+                {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
+                <ChampSaisie  setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur"  regex={codeRegex}  ></ChampSaisie>
+
+                {errors.type && <div className="error">{errors.type}</div>}
+                <div class="form-label-type">
+                    <label class="radio-label">
+                        <input
+                            type="radio"
+                            name="type"
+                            value="parrain"
+                            checked={utilisateurDto.type === 'parrain'}
+                            onChange={(e) => handleChange('type', e.target.value)}
+                            class="radio-input"
+                        />
+                        Parrain
+                    </label>
+                    <label class="radio-label">
+                        <input
+                            type="radio"
+                            name="type"
+                            value="porteur"
+                            checked={utilisateurDto.type === 'porteur'}
+                            onChange={(e) => handleChange('type', e.target.value)}
+                            class="radio-input"
+                        />
+                        Porteur
+                    </label>
+                </div>
+
                 <Container fluid>
                     <div className="position-bouton">
-                                <button
-                                    type="submit"
-                                    className="bouton-envoyer"
-                                    disabled={!validNom || !validPrenom  || !validEntreprise || !validPlateforme || !validCode}
-                                >Envoyer
+                        {!isSubmitted ? (
+                            <button
+                                type="submit"
+                                className="bouton-envoyer"
+                            >
+                                Envoyer
                                 <img src={send} className="img-send" alt="send" />
-                                </button>
-
+                            </button>
+                        ) : (
+                            <div className='row g-2 mb-3'>
+                                <div className="col-md d-flex align-items-center">
+                                    <label htmlFor="idUtilisateur" className="form-label me-2">Identifiant : </label>
+                                    <div className="custom-container">
+                                        <input
+                                            className="form-control custom-id"
+                                            disabled
+                                            name="idUtilisateur"
+                                            id="idUtilisateur"
+                                            value={utilisateurDto.idUtilisateur}
+                                        />
+                                    </div>
+                                </div>
                             </div>
+                        )}
+                    </div>
                 </Container>
+
             </form>
         </Wrapper>
     )

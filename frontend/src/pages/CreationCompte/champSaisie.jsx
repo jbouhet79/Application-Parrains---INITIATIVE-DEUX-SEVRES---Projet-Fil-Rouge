@@ -1,16 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import './creationCompte.css';
 
-
-// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/;
-// const msgRegex = /^[a-zA-Z0-9À-ÿ\- ]{20,350}$/;
-
-export function ChampSaisie({setValue, label}) {
+export function ChampSaisie({setValue, label, name, value, regex}) {
 
     const [errMsg, setErrMsg] = useState([{}]);
 
-    const [input, setInput] = useState('');
     const [validInput, setValidInput] = useState(false);
     const [focusInput, setFocusInput] = useState(false);
 
@@ -21,13 +15,13 @@ export function ChampSaisie({setValue, label}) {
         inputRef.current.focus()
     }, [])
 
-    useEffect(() => {
-    const result = otherRegex.test(input)
-    setValidInput(result)
-    }, [input])
+     useEffect(() => {
+           const result = regex.test(value);
+           setValidInput(result);
+       }, [value]);
 
-    const handleChange = () => {
-        setInput(inputRef.current.value)
+    const handleChange = (e) => {
+     setValue(e.target.value);
     }
 
 
@@ -40,31 +34,30 @@ export function ChampSaisie({setValue, label}) {
     return (
         <div className='row g-2 mb-3'>
                 <div className="col-md">
-                    <label htmlFor="nom" className="form-label">{label}</label>
-                    <div className="champ">
+                    <label htmlFor={name} className="form-label">{label}</label>
+                    <div className="custom-container">
                         
-                        <input
-                            style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)', color: 'black', border: 'none'}}
+                        <input 
                             ref={inputRef}
                             onChange={handleChange}
+                            value={value}
+                            name={name}
                             onBlur={
                                 () => addMsgError('Votre nom doit être au bon format!', setFocusInput, validInput)
                             }
                             onFocus={() => { setFocusInput(true) }}
                             type="text"
-                            //   className={validName ? "is-valid form-control" : "is-invalid form-control"} 
-                            className={
-                                !input ? "form-control" : validInput ? "is-valid form-control" : "is-invalid form-control"
-                            }
-                            // imbrique les turners pour les conditions d'affichage du champ de saisie
+
+                            className={`form-control custom-input ${!value ? "" : validInput ? "is-valid" : "is-invalid"}`}
+
                             disabled={false}
-                            id="input"
-                            aria-describedby="emailHelp"
+
+                            id={name}
                         />
 
                     </div>
                     {
-                        (!validInput && input && !focusInput) && <div className="alert alert-danger mt-3" role="alert">
+                        (!validInput && value && !focusInput) && <div className="alert alert-danger mt-3" role="alert">
                             {errMsg}
                         </div>
                     }
