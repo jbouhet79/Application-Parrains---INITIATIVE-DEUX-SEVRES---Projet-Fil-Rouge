@@ -1,6 +1,6 @@
 spring:
     application:
-        name:Trouve Ton Match
+        name: Trouve Ton Match
     datasource:
         url: jdbc:postgresql://localhost:5432/ttm
         username: postgres
