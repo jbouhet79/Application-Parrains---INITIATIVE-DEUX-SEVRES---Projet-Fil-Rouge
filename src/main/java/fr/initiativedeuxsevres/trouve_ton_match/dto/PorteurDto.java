@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.dto;
 
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,6 +71,21 @@ public class PorteurDto extends UtilisateurDto {
         this.plateformeUtilisateur = utilisateurDto.getPlateformeUtilisateur();
         this.codeUtilisateur = utilisateurDto.getCodeUtilisateur();
 
+    }
+
+    // Constructeur qui accepte un objet Porteur
+    public PorteurDto(Porteur porteur) {
+        this.idUtilisateur = porteur.getIdUtilisateur();
+        this.nomUtilisateur = porteur.getNomUtilisateur();
+        this.prenomUtilisateur = porteur.getPrenomUtilisateur();
+        this.entrepriseUtilisateur = porteur.getEntrepriseUtilisateur();
+        this.plateformeUtilisateur = porteur.getPlateformeUtilisateur();
+        this.codeUtilisateur = porteur.getCodeUtilisateur();
+        this.dateLancement = porteur.getDateLancement();
+        this.domaine = porteur.getDomaine();
+        this.besoins = porteur.getBesoins();
+        this.lieuActivite = porteur.getLieuActivite();
+        this.disponibilites = porteur.getDisponibilites();
     }
 }
 

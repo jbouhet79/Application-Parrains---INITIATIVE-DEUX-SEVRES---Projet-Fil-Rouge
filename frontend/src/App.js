@@ -9,20 +9,23 @@ import Ressources from './pages/Ressources/ressources';
 import Indicateurs from './pages/Indicateurs/indicateurs';
 import Connexion from './pages/Connexion/connexion';
 import CreationCompte from './pages/CreationCompte/creationCompte';
+import { AuthProvider } from './AuthContext';
 
 function App() {
   return (
-    <Routes>
-      <Route path='/' element={<Accueil/>}></Route>
-      <Route path='/monCompte' element={<MonCompte/>}></Route>
-      <Route path='/profils' element={<Profils/>}></Route>
-      <Route path='/matchs' element={<Matchs/>}></Route>
-      <Route path='/messages' element={<Messages/>}></Route>
-      <Route path='/ressources' element={<Ressources/>}></Route>
-      <Route path='/indicateurs' element={<Indicateurs/>}></Route>
-      <Route path='/connexion' element={<Connexion/>}></Route>
-      <Route path='/creationCompte' element={<CreationCompte/>}></Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path='/' element={<Accueil/>}></Route>
+        <Route path='/monCompte' element={<MonCompte/>}></Route>
+        <Route path='/profils' element={<Profils/>}></Route>
+        <Route path='/matchs' element={<Matchs/>}></Route>
+        <Route path='/messages' element={<Messages/>}></Route>
+        <Route path='/ressources' element={<Ressources/>}></Route>
+        <Route path='/indicateurs' element={<Indicateurs/>}></Route>
+        <Route path='/connexion' element={<Connexion/>}></Route>
+        <Route path='/creationCompte' element={<CreationCompte/>}></Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 

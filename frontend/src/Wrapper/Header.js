@@ -7,9 +7,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from "react-router-dom";
+import { useAuth } from '../AuthContext';
 
 
 const Header = () => {
+    const { isAuthenticated, logout } = useAuth();
+
     return (
         <header className="header">
             <Container fluid>
@@ -61,13 +64,27 @@ const Header = () => {
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
                             <Link className='menu' to={"/indicateurs"}>Indicateurs</Link>
                     </Col>
-                    <Col sm={3} className="d-flex justify-content-end align-items-top">
+
+                    {/* <Col sm={3} className="d-flex justify-content-end align-items-top">
                         <div className='bouton'>
                             <Link to="/connexion">
                                 <button type="button" class="btn btn-outline-dark btn-sm" >Se connecter</button>
                             </Link>
                         </div>
+                    </Col> */}
+
+                    <Col sm={3} className="d-flex justify-content-end align-items-top">
+                        <div className='bouton'>
+                            {isAuthenticated ? (
+                                <button type="button" className="btn btn-outline-dark btn-sm" onClick={logout}>Se déconnecter</button>
+                            ) : (
+                                <Link to="/connexion">
+                                    <button type="button" className="btn btn-outline-dark btn-sm">Se connecter</button>
+                                </Link>
+                            )}
+                        </div>
                     </Col>
+
                     <Col sm={1} className="d-flex justify-content-center align-items-top">
                         <div className='bouton'>
                             <Link to="/creationCompte">
