@@ -5,6 +5,7 @@ import '../CreationCompte/creationCompte.css';
 import './connexion.css';
 import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
 
 
 const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/; // minimum 2 caractères pour les autres champs
@@ -22,6 +23,7 @@ const Connexion = () => {
     const [errors, setErrors] = useState({});
     const [userNotFound, setUserNotFound] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const validate = () => {
       const newErrors = {};
@@ -54,12 +56,14 @@ const Connexion = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Validation des champs
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
 
+        // Requête pour vérifier l'existence de l'utilisateur
         fetch('http://localhost:8080/creationCompte/checkutilisateur', {
             method: 'POST',
             headers: {
@@ -70,6 +74,7 @@ const Connexion = () => {
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
+                login(); // Mettre à jour l'état de connexion
                 navigate('/monCompte'); // Rediriger vers la page "monCompte"
             } else {
                 setUserNotFound(true); // Afficher le message "Utilisateur inconnu"

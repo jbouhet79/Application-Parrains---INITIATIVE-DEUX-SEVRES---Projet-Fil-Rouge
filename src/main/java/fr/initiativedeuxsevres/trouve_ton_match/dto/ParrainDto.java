@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.dto;
 
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,6 +70,21 @@ public class ParrainDto extends UtilisateurDto {
         this.plateformeUtilisateur = utilisateurDto.getPlateformeUtilisateur();
         this.codeUtilisateur = utilisateurDto.getCodeUtilisateur();
 
+    }
+
+    // Constructeur qui accepte un objet Parrain
+    public ParrainDto(Parrain parrain) {
+        this.idUtilisateur = parrain.getIdUtilisateur();
+        this.nomUtilisateur = parrain.getNomUtilisateur();
+        this.prenomUtilisateur = parrain.getPrenomUtilisateur();
+        this.entrepriseUtilisateur = parrain.getEntrepriseUtilisateur();
+        this.plateformeUtilisateur = parrain.getPlateformeUtilisateur();
+        this.codeUtilisateur = parrain.getCodeUtilisateur();
+        this.presentationParcours = parrain.getPresentationParcours();
+        this.branchesReseau = parrain.getBranchesReseau();
+        this.domainesExpertise = parrain.getDomainesExpertise();
+        this.secteurGeographique = parrain.getSecteurGeographique();
+        this.disponibilites = parrain.getDisponibilites();
     }
 
 
