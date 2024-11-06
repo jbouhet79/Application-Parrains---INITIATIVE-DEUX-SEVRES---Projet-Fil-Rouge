@@ -98,4 +98,19 @@ public class PorteurService {
     }
 
 
+    public Porteur completerComptePorteur(Long idUtilisateur, String dateLancement, String domaine, String besoins, String lieuActivite, String disponibilites) {
+        // Récupérer le parrain par son ID
+        Porteur porteur = porteurRepository.findById(idUtilisateur)
+                .orElseThrow(() -> new RuntimeException("Porteur non trouvé"));
+
+        // Mettre à jour les champs du porteur
+        porteur.setDateLancement(dateLancement);
+        porteur.setDomaine(domaine);
+        porteur.setBesoins(besoins);
+        porteur.setLieuActivite(lieuActivite);
+        porteur.setDisponibilites(disponibilites);
+
+        // Sauvegarder le porteur mis à jour
+        return porteurRepository.save(porteur);
+    }
 }
