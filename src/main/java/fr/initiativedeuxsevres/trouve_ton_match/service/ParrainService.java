@@ -49,4 +49,20 @@ public class ParrainService {
                 saved.getDisponibilites()
         );
     }
+
+    public Parrain completerCompteParrain(Long idUtilisateur, String presentationParcours, String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {
+        // Récupérer le parrain par son ID
+        Parrain parrain = parrainRepository.findById(idUtilisateur)
+                .orElseThrow(() -> new RuntimeException("Parrain non trouvé"));
+
+        // Mettre à jour les champs du parrain
+        parrain.setPresentationParcours(presentationParcours);
+        parrain.setBranchesReseau(branchesReseau);
+        parrain.setDomainesExpertise(domainesExpertise);
+        parrain.setSecteurGeographique(secteurGeographique);
+        parrain.setDisponibilites(disponibilites);
+
+        // Sauvegarder le parrain mis à jour
+        return parrainRepository.save(parrain);
+    }
 }
