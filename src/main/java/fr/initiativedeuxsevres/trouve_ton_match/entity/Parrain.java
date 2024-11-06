@@ -54,8 +54,5 @@ public class Parrain extends Utilisateur {
         this.secteurGeographique = secteurGeographique;
         this.disponibilites = disponibilites;
     }
-        
-
-
 
 }

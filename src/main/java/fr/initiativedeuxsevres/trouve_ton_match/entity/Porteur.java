@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Table(name= "porteur")
 public class Porteur extends Utilisateur  {
 
-
     private String dateLancement;
     private String domaine;
     private String besoins;
@@ -51,6 +50,5 @@ public class Porteur extends Utilisateur  {
         this.lieuActivite = lieuActivite;
         this.disponibilites = disponibilites;
     }
-
 
 }
