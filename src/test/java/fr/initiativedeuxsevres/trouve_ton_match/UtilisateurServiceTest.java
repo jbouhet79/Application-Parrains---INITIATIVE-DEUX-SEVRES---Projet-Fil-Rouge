@@ -19,5 +19,17 @@ public class UtilisateurServiceTest {
     @Test
     public void sauvegarderTypeAccompagnement() {
 
+        Long idUtilisateur = 1L;
+
+        boolean ressourcesHumaines = true;
+        boolean financesComptabilité = true;
+        boolean juridique = true;
+        boolean informatique = true;
+        boolean commercialCommunication = true;
+
+
+
+
+
     }
 }
