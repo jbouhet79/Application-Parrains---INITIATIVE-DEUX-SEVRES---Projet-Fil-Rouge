@@ -17,10 +17,10 @@ import static org.mockito.Mockito.when;
 public class UtilisateurServiceTest {
 
     @Mock
-    private UtilisateurRepository utilisateurRepository;
+    private TypeAccompagnementRepository typeAccompagnementRepository;
 
     @InjectMocks
-    private UtilisateurService utilisateurService;
+    private TypeAccompagnementService typeAccompagnementService;
 
     @Test
     public void sauvegarderTypeAccompagnement() {
