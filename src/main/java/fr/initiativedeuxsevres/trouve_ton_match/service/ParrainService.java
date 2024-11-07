@@ -7,7 +7,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Transactional
 public class ParrainService {
@@ -15,7 +14,7 @@ public class ParrainService {
     @Autowired
     private ParrainRepository parrainRepository;
 
-    public ParrainDto createParrain (ParrainDto newParrainDto) {
+    public Parrain createParrain (ParrainDto newParrainDto) {
 
         // On transforme un Dto en entité
         Parrain nouveauParrainEntity = new Parrain(
@@ -32,22 +31,7 @@ public class ParrainService {
                 newParrainDto.getDisponibilites()
         );
 
-        Parrain saved = parrainRepository.save(nouveauParrainEntity);
-
-        // On transforme l'entité sauvée en un nouveau Dto pour le renvoyer au front (via le controlleur)
-        return new ParrainDto(
-                saved.getIdUtilisateur(),
-                saved.getNomUtilisateur(),
-                saved.getPrenomUtilisateur(),
-                saved.getEntrepriseUtilisateur(),
-                saved.getPlateformeUtilisateur(),
-                saved.getCodeUtilisateur(),
-                saved.getPresentationParcours(),
-                saved.getBranchesReseau(),
-                saved.getDomainesExpertise(),
-                saved.getSecteurGeographique(),
-                saved.getDisponibilites()
-        );
+        return parrainRepository.save(nouveauParrainEntity);
     }
 
     public Parrain completerCompteParrain(Long idUtilisateur, String presentationParcours, String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {

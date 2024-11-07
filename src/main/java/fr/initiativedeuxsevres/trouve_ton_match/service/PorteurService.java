@@ -55,20 +55,12 @@ public class PorteurService {
 
     // ou seconde version :
 
-    public PorteurDto createPorteurOld(PorteurDto newPorteurDto) {
+    public Porteur createPorteur(PorteurDto newPorteurDto) {
 
         // On transforme un Dto en entité (via la méthode privée porteurDtoToEntity décrite dessous)
         Porteur nouveauPorteurEntity = porteurDtoToEntity(newPorteurDto);
 
-        Porteur nPorteur = porteurRepository.save(nouveauPorteurEntity);
-
-        // On affecte l'id de l'entité nouvellement créée au Dto passé en paramètre
-        // autre méthode que celle utilisée dans ParrainService
-        // valable uniquement si seul l'id change (qui passe de nul à quelque chose)
-        newPorteurDto.setIdUtilisateur(nPorteur.getIdUtilisateur());
-
-        // On renvoie l'ancien Dto avec le nouvel id pour le renvoyer au front (via le controlleur)
-        return newPorteurDto;
+        return porteurRepository.save(nouveauPorteurEntity);
     }
 
     private static Porteur porteurDtoToEntity(PorteurDto newPorteurDto) {
