@@ -7,6 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class UtilisateurServiceTest {
 
@@ -27,9 +33,28 @@ public class UtilisateurServiceTest {
         boolean informatique = true;
         boolean commercialCommunication = true;
 
+        TypeAccompagnement mockTypeAccompagnement = new TypeAccompagnement (
+                ressourcesHumaines,
+                financesComptabilité,
+                juridique,
+                informatique,
+                commercialCommunication);
 
+        when(typeAccompagnementRepository.findById(idUtilisateur)).thenReturn(Optional.of(mockTypeAccompagnement));
+        when(typeAccompagnementRepository.save(any(TypeAccompagnement.class))).thenReturn(mockTypeAccompagnement);
 
+        TypeAccompagnement typeAccompagnementTest = typeAccompagnementService.sauvegarderTypeAccompagnement(
+                idUtilisateur,
+                ressourcesHumaines,
+                financesComptabilité,
+                juridique,
+                informatique,
+                commercialCommunication);
 
-
+        assertEquals(ressourcesHumaines, typeAccompagnementTest.getRessoucesHumaines());
+        assertEquals(financesComptabilité, typeAccompagnementTest.getFinancesComptabilité());
+        assertEquals(juridique, typeAccompagnementTest.getJuridique());
+        assertEquals(informatique, typeAccompagnementTest.getInformatique());
+        assertEquals(commercialCommunication, typeAccompagnementTest.getCommercialCommunication());
     }
 }
