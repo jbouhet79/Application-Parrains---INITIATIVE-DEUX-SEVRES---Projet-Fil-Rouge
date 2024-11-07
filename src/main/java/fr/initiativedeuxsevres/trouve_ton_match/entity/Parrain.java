@@ -2,14 +2,15 @@ package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
+//@AllArgsConstructor
+//@NoArgsConstructor
+@SuperBuilder
 @Table(name= "parrain")
 public class Parrain extends Utilisateur {
 
@@ -36,17 +37,13 @@ public class Parrain extends Utilisateur {
      * @param secteurGeographique
      * @param disponibilites
      */
-    public Parrain (Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur, String entrepriseUtilisateur,
-                    String plateformeUtilisateur, String codeUtilisateur, String presentationParcours,
-                    String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites
-                    )
-    {
-        this.idUtilisateur = idUtilisateur;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
-        this.entrepriseUtilisateur = entrepriseUtilisateur;
-        this.plateformeUtilisateur = plateformeUtilisateur;
-        this.codeUtilisateur = codeUtilisateur;
+
+    public Parrain(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur, String entrepriseUtilisateur,
+                   String plateformeUtilisateur, String codeUtilisateur, String presentationParcours,
+                   String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {
+
+        // Appel au constructeur de la classe mère
+        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur);
 
         this.presentationParcours = presentationParcours;
         this.branchesReseau = branchesReseau;
@@ -54,8 +51,5 @@ public class Parrain extends Utilisateur {
         this.secteurGeographique = secteurGeographique;
         this.disponibilites = disponibilites;
     }
-        
-
-
 
 }

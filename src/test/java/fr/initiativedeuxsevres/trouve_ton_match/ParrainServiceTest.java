@@ -36,12 +36,20 @@ public class ParrainServiceTest {
         String secteurGeographique = "NIORT";
         String disponibilites = "5j";
 
-        Parrain mockParrain = new Parrain(
-                presentationParcours,
-                branchesReseau,
-                domainesExpertise,
-                secteurGeographique,
-                disponibilites);
+//        Parrain mockParrain = new Parrain(
+//                presentationParcours,
+//                branchesReseau,
+//                domainesExpertise,
+//                secteurGeographique,
+//                disponibilites);
+
+        Parrain mockParrain = Parrain.builder()
+                .presentationParcours(presentationParcours)
+                .branchesReseau(branchesReseau)
+                .domainesExpertise(domainesExpertise)
+                .secteurGeographique(secteurGeographique)
+                .disponibilites(disponibilites)
+                .build();
 
         // when des deux appels à la base de données faits dans la fonction
         when(parrainRepository.findById(idUtilisateur)).thenReturn(Optional.of(mockParrain));

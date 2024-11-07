@@ -1,8 +1,11 @@
 package fr.initiativedeuxsevres.trouve_ton_match.dto;
 
+import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +22,6 @@ public class UtilisateurDto {
     protected String plateformeUtilisateur;
     protected String codeUtilisateur;
     protected String type;
-
+    protected List<Long> accompagnementTypeList;
 
 }

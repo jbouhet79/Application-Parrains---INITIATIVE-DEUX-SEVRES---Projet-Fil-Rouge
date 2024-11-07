@@ -36,12 +36,20 @@ public class PorteurServiceTest {
         String lieuActivite = "NIORT";
         String disponibilites = "lundi";
 
-        Porteur mockPorteur = new Porteur(
-                dateLancement,
-                domaine,
-                besoins,
-                lieuActivite,
-                disponibilites);
+//        Porteur mockPorteur = new Porteur(
+//                dateLancement,
+//                domaine,
+//                besoins,
+//                lieuActivite,
+//                disponibilites);
+
+        Porteur mockPorteur = Porteur.builder()
+                .dateLancement(dateLancement)
+                .domaine(domaine)
+                .besoins(besoins)
+                .lieuActivite(lieuActivite)
+                .disponibilites(disponibilites)
+                .build();
 
         // when
         when(porteurRepository.findById(idUtilisateur)).thenReturn(Optional.of(mockPorteur));

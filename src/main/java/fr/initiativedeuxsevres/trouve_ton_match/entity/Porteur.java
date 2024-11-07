@@ -2,17 +2,17 @@ package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
+//@AllArgsConstructor
+//@NoArgsConstructor
+@SuperBuilder
 @Table(name= "porteur")
 public class Porteur extends Utilisateur  {
-
 
     private String dateLancement;
     private String domaine;
@@ -38,12 +38,8 @@ public class Porteur extends Utilisateur  {
                    String plateformeUtilisateur, String codeUtilisateur, String dateLancement, String domaine,
                    String besoins, String lieuActivite, String disponibilites) {
 
-        this.idUtilisateur = idUtilisateur;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
-        this.entrepriseUtilisateur = entrepriseUtilisateur;
-        this.plateformeUtilisateur = plateformeUtilisateur;
-        this.codeUtilisateur = codeUtilisateur;
+        // Appel au constructeur de la classe mère
+        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur);
 
         this.dateLancement = dateLancement;
         this.domaine = domaine;
@@ -51,6 +47,5 @@ public class Porteur extends Utilisateur  {
         this.lieuActivite = lieuActivite;
         this.disponibilites = disponibilites;
     }
-
 
 }

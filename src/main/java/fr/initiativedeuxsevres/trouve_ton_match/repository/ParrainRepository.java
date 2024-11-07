@@ -6,9 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-//public interface ParrainRepository extends JpaRepository <Utilisateur, Long> {
-//
-//}
 
 public interface ParrainRepository extends JpaRepository<Parrain, Long> {
 
