@@ -4,10 +4,12 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.ParrainDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.PorteurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteursReseaux;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 import fr.initiativedeuxsevres.trouve_ton_match.service.ParrainService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.PorteurService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.TypeAccompagnementService;
+import fr.initiativedeuxsevres.trouve_ton_match.service.SecteursReseauxService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,9 @@ public class UtilisateurController {
     private UtilisateurService utilisateurService;
 
     private TypeAccompagnementService typeAccompagnementService;
-//    private TypeAccompagnementRepository typeAccompagnementService;
+
+    private SecteursReseauxService secteursReseauxService;
+
 
     @Autowired
     public UtilisateurController(ParrainService parrainService, PorteurService porteurService, UtilisateurService utilisateurService, TypeAccompagnementService typeAccompagnementService) {
@@ -38,6 +42,7 @@ public class UtilisateurController {
         this.porteurService = porteurService;
         this.utilisateurService = utilisateurService;
         this.typeAccompagnementService = typeAccompagnementService;
+        this.secteursReseauxService = secteursReseauxService;
     }
 
     @PostMapping(value = "/createutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,12 +78,24 @@ public class UtilisateurController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/accompagnemantutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/accompagnementutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Utilisateur> accompagnementUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
         List<TypeAccompagnement> accompagnementTypeList = typeAccompagnementService.findAllById(utilisateurDto.getAccompagnementTypeList());
 
         Utilisateur utilisateur = utilisateurService.findByCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
         utilisateur.setAccompagnementTypeList(accompagnementTypeList);
+
+        Utilisateur newUser = utilisateurService.save(utilisateur);
+
+        return ResponseEntity.ok(newUser);
+    }
+
+    @PostMapping(value = "/secteursreseauxutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Utilisateur> secteursReseauxUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
+        List<SecteursReseaux> secteursReseauxList = secteursReseauxService.findAllById(utilisateurDto.getSecteursReseauxList());
+
+        Utilisateur utilisateur = utilisateurService.findByCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
+        utilisateur.setSecteursReseauxList(secteursReseauxList);
 
         Utilisateur newUser = utilisateurService.save(utilisateur);
 
