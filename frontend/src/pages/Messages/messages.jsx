@@ -1,11 +1,11 @@
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 
-const messages = () => {
-    return  (
-      <Wrapper>
-        <h1>messages</h1>;
-      </Wrapper>
-    )
-  };
-  
-  export default messages;
+const Messages = () => {
+  return (
+    <Wrapper>
+      <h1>messages</h1>;
+    </Wrapper>
+  )
+};
+
+export default Messages;

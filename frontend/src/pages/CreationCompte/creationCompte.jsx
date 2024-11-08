@@ -1,7 +1,7 @@
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { ChampSaisie } from './champSaisie';
+import { ChampSaisie } from './ChampSaisie';
 import './creationCompte.css';
 import Container from 'react-bootstrap/esm/Container';
 import send from '../../media/images/logos/send_blanc.png';
@@ -39,7 +39,7 @@ const CreationCompte = () => {
             codeUtilisateur: '',
             type: ''
         });
-    
+
         setIsSubmitted(false);
     }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
 
@@ -47,14 +47,14 @@ const CreationCompte = () => {
 
     const validate = () => {
         const newErrors = {};
-    
+
         if (!utilisateurDto.nomUtilisateur) newErrors.nomUtilisateur = 'Le nom est requis';
         if (!utilisateurDto.prenomUtilisateur) newErrors.prenomUtilisateur = 'Le prénom est requis';
         if (!utilisateurDto.entrepriseUtilisateur) newErrors.entrepriseUtilisateur = 'L\'entreprise est requise';
         if (!utilisateurDto.plateformeUtilisateur) newErrors.plateformeUtilisateur = 'La plateforme est requise';
         if (!utilisateurDto.codeUtilisateur) newErrors.codeUtilisateur = 'Le code d\'accès est requis';
         if (!utilisateurDto.type) newErrors.type = 'Le type de profil est requis';
-    
+
         return newErrors;
     };
 
@@ -74,7 +74,7 @@ const CreationCompte = () => {
             delete newErrors[name];
         }
         setErrors(newErrors);
-        };
+    };
 
 
 
@@ -90,12 +90,12 @@ const CreationCompte = () => {
         }
 
         fetch('http://localhost:8080/creationCompte/createutilisateur', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(utilisateurDto)
-            })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(utilisateurDto)
+        })
             .then(response => response.json())
             .then(data => {
                 console.log('Utilisateur créé:', data);
@@ -119,8 +119,8 @@ const CreationCompte = () => {
                 <h1 className='text'>creation compte</h1>
             </div>
             <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
-                
-                {errors.prenomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
+
+                {errors.nomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
                 <ChampSaisie
                     setValue={(value) => handleChange('nomUtilisateur', value)}
                     label="Nom :"
@@ -128,18 +128,18 @@ const CreationCompte = () => {
                     value={utilisateurDto.nomUtilisateur}
                     regex={nomRegex}
                 />
-                
+
                 {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
-                <ChampSaisie  setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur"  value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
-                
+                <ChampSaisie setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur" value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
+
                 {errors.entrepriseUtilisateur && <div className="error">{errors.entrepriseUtilisateur}</div>}
-                <ChampSaisie  setValue={(value) => handleChange('entrepriseUtilisateur', value)}  value={utilisateurDto.entrepriseUtilisateur} label="Entreprise (entreprise représentée en tant que membre d’Initiative Deux-Sèvres) :" name="entrepriseUtilisateur" regex={otherRegex}  ></ChampSaisie>
-                
+                <ChampSaisie setValue={(value) => handleChange('entrepriseUtilisateur', value)} value={utilisateurDto.entrepriseUtilisateur} label="Entreprise (entreprise représentée en tant que membre d’Initiative Deux-Sèvres) :" name="entrepriseUtilisateur" regex={otherRegex}  ></ChampSaisie>
+
                 {errors.plateformeUtilisateur && <div className="error">{errors.plateformeUtilisateur}</div>}
-                <ChampSaisie  setValue={(value) => handleChange('plateformeUtilisateur', value)}  value={utilisateurDto.plateformeUtilisateur} label="Plateforme Initiative :" name="plateformeUtilisateur"  regex={otherRegex}  ></ChampSaisie>
-                
+                <ChampSaisie setValue={(value) => handleChange('plateformeUtilisateur', value)} value={utilisateurDto.plateformeUtilisateur} label="Plateforme Initiative :" name="plateformeUtilisateur" regex={otherRegex}  ></ChampSaisie>
+
                 {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
-                <ChampSaisie  setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur"  regex={codeRegex}  ></ChampSaisie>
+                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={codeRegex}  ></ChampSaisie>
 
                 {errors.type && <div className="error">{errors.type}</div>}
                 <div class="form-label-type">
@@ -195,7 +195,6 @@ const CreationCompte = () => {
                         )}
                     </div>
                 </Container>
-
             </form>
         </Wrapper>
     )

@@ -1,8 +1,8 @@
 import "./accueil.css";
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 
 
-const accueil = () => {
+const Accueil = () => {
     return (
         <>
             <Wrapper>
@@ -19,4 +19,4 @@ const accueil = () => {
     )
 };
 
-export default accueil;
+export default Accueil;

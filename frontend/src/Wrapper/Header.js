@@ -46,7 +46,7 @@ const Header = () => {
                     </ul> */}
                    <Col sm={1} className="d-flex justify-content-first align-items-top">
                             {/* <div className='menu'>Mon compte</div> */}
-                            <Link className="menu" to={"/monCompte"}>Mon compte</Link>
+                            <Link className="menu" to={"/monCompteParrain"}>Mon compte</Link>
 
                     </Col>
                     <Col sm={1} className="d-flex justify-content-center align-items-top">

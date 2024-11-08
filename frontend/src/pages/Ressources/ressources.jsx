@@ -1,11 +1,11 @@
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 
-const ressources = () => {
-    return  (
-      <Wrapper>
-        <h1>Ressources</h1>;
-      </Wrapper>
-    )
-  };
-  
-  export default ressources;
+const Ressources = () => {
+  return (
+    <Wrapper>
+      <h1>Ressources</h1>;
+    </Wrapper>
+  )
+};
+
+export default Ressources;
