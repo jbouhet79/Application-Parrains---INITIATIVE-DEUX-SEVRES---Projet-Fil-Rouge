@@ -34,7 +34,7 @@ public abstract class Utilisateur {
     @JoinTable(name = "secteurs_reseaux_utilisateurs",
             joinColumns = @JoinColumn(name = "utilisateur"),
             inverseJoinColumns = @JoinColumn(name = "secteurs_reseaux"))
-    protected List<SecteursReseaux> secteursreseauxList;
+    protected List<SecteursReseaux> secteursReseauxList;
 
     // Constructeur avec tous les champs
     public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,

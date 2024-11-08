@@ -23,5 +23,6 @@ public class UtilisateurDto {
     protected String codeUtilisateur;
     protected String type;
     protected List<Long> accompagnementTypeList;
+    protected List<Long> secteursReseauxList;
 
 }
