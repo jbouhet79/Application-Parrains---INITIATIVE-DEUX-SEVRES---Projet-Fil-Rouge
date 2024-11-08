@@ -30,6 +30,12 @@ public abstract class Utilisateur {
             inverseJoinColumns = @JoinColumn(name = "accompagnement"))
     protected List<TypeAccompagnement> accompagnementTypeList;
 
+    @ManyToMany
+    @JoinTable(name = "secteurs_reseaux_utilisateurs",
+            joinColumns = @JoinColumn(name = "utilisateur"),
+            inverseJoinColumns = @JoinColumn(name = "secteurs_reseaux"))
+    protected List<SecteursReseaux> secteursreseauxList;
+
     // Constructeur avec tous les champs
     public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,
                        String entrepriseUtilisateur, String plateformeUtilisateur, String codeUtilisateur) {

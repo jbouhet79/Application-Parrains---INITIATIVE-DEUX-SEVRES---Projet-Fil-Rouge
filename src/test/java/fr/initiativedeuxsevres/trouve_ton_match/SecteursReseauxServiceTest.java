@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class SecteursReseauxServiceTest {
 
     @Mock
-    private SecteursReseauxServiceRepository secteursReseauxServiceRepository;
+    private SecteursReseauxRepository secteursReseauxRepository;
 
     @InjectMocks
     private SecteursReseauxService secteursReseauxService;
