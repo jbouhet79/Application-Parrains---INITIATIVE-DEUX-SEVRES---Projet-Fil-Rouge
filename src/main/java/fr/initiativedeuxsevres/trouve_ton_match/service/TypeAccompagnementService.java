@@ -24,7 +24,14 @@ public class TypeAccompagnementService {
      */
     public List<TypeAccompagnement> findAllById(List<Long> ids) {
         // Utiliser le repository pour trouver tous les TypeAccompagnement par IDs
-        return typeAccompagnementRepository.findAllById(ids);
+//        return typeAccompagnementRepository.findAllById(ids);
+        List<TypeAccompagnement> result = typeAccompagnementRepository.findAllById(ids);
+        System.out.println("Types d'accompagnement trouvés : " + result);
+        return result;
+    }
+
+    public void save(TypeAccompagnement typeAccompagnement) {
+        typeAccompagnementRepository.save(typeAccompagnement);
     }
 
     /**
@@ -43,7 +50,10 @@ public class TypeAccompagnementService {
         // Crée les nouveaux accompagnements pour les IDs manquants
         List<TypeAccompagnement> nouveauxAccompagnements = ids.stream()
                 .filter(id -> !IdsExistants.contains(id))
-                .map(id -> TypeAccompagnement.builder().id(id).name("Nom par défaut " + id).build())
+                .map(id -> TypeAccompagnement.builder()
+                        .id(id)
+                        .name(Collections.singletonList("Accompagnement " + id)) // Liste de String
+                        .build())
                 .collect(Collectors.toList());
 
         // Sauvegarde les nouveaux accompagnements uniquement s'il y en a

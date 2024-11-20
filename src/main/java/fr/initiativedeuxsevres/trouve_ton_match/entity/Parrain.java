@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -17,12 +18,27 @@ public class Parrain extends Utilisateur {
     /**
      * Propriétés de la classe
      */
+    @Column(name = "presentation_parcours")
     private String presentationParcours;
+
+    @Column(name = "branches_reseau")
     private String branchesReseau;
+
+    @Column(name = "domaines_expertise")
     private String domainesExpertise;
+
+    @Column(name = "secteur_geographique")
     private String secteurGeographique;
+
+    @Column(name = "disponibilites")
     private String disponibilites;
 
+    @Builder.Default
+    private String type = Parrain.class.getSimpleName();
+
+    public Parrain(){
+        super();
+    }
     /**
      * Constructeur avec tous les paramètres de la classe mère
      * @param idUtilisateur

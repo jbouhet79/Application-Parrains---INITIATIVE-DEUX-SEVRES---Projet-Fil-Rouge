@@ -24,7 +24,14 @@ public class SecteursReseauxService {
      */
     public List<SecteursReseaux> findAllById(List<Long> ids) {
         // Utiliser le repository pour trouver tous les SecteursReseaux par IDs
-        return secteursReseauxRepository.findAllById(ids);
+//        return secteursReseauxRepository.findAllById(ids);
+        List<SecteursReseaux> result = secteursReseauxRepository.findAllById(ids);
+        System.out.println("Secteurs réseaux trouvés : " + result);
+        return result;
+    }
+
+    public void save(SecteursReseaux secteursReseaux) {
+        secteursReseauxRepository.save(secteursReseaux);
     }
 
     /**
@@ -44,7 +51,10 @@ public class SecteursReseauxService {
         // Crée les nouveaux accompagnements pour les IDs manquants
         List<SecteursReseaux> nouveauxAccompagnements = ids.stream()
                 .filter(id -> !IdsExistants.contains(id))
-                .map(id -> SecteursReseaux.builder().id(id).name("Nom par défaut " + id).build())
+                .map(id -> SecteursReseaux.builder()
+                        .id(id)
+                        .name(Collections.singletonList("Accompagnement " + id)) // Liste de String
+                        .build())
                 .collect(Collectors.toList());
 
         // Sauvegarde les nouveaux accompagnements uniquement s'il y en a

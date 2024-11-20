@@ -36,6 +36,8 @@ public abstract class Utilisateur {
             inverseJoinColumns = @JoinColumn(name = "secteurs_reseaux"))
     protected List<SecteursReseaux> secteursReseauxList;
 
+    public Utilisateur() {
+    }
     // Constructeur avec tous les champs
     public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,
                        String entrepriseUtilisateur, String plateformeUtilisateur, String codeUtilisateur) {

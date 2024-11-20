@@ -20,8 +20,12 @@ public class TypeAccompagnement {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    @Column(name = "accompagnement")
+    // private List<Long> name;
+     private List<String> name;
+    // private String name;
 
     @ManyToMany(mappedBy = "accompagnementTypeList")
     private List<Utilisateur> utilisateurs;
+
 }

@@ -19,7 +19,12 @@ public class Porteur extends Utilisateur  {
     private String besoins;
     private String lieuActivite;
     private String disponibilites;
+    @Builder.Default
+    private String type = Porteur.class.getSimpleName();
 
+    public Porteur(){
+        super();
+    }
     /**
      * Constructeur avec tous les paramètres de la classe mère
      * @param idUtilisateur

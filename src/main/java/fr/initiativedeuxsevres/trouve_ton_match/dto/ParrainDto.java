@@ -87,5 +87,4 @@ public class ParrainDto extends UtilisateurDto {
         this.disponibilites = parrain.getDisponibilites();
     }
 
-
 }

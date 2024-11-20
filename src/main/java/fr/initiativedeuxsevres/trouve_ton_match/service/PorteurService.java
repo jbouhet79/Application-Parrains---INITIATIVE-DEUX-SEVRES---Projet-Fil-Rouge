@@ -2,6 +2,7 @@ package fr.initiativedeuxsevres.trouve_ton_match.service;
 
 import fr.initiativedeuxsevres.trouve_ton_match.dto.ParrainDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.PorteurDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
 import fr.initiativedeuxsevres.trouve_ton_match.repository.PorteurRepository;
@@ -55,10 +56,16 @@ public class PorteurService {
 
     // ou seconde version :
 
-    public Porteur createPorteur(PorteurDto newPorteurDto) {
+    public Porteur createPorteur(UtilisateurDto newPorteurDto) {
 
-        // On transforme un Dto en entité (via la méthode privée porteurDtoToEntity décrite dessous)
-        Porteur nouveauPorteurEntity = porteurDtoToEntity(newPorteurDto);
+        // On transforme un Dto en entité
+        Porteur nouveauPorteurEntity = Porteur.builder()
+                .nomUtilisateur(newPorteurDto.getNomUtilisateur())
+                .prenomUtilisateur(newPorteurDto.getPrenomUtilisateur())
+                .entrepriseUtilisateur(newPorteurDto.getEntrepriseUtilisateur())
+                .plateformeUtilisateur(newPorteurDto.getPlateformeUtilisateur())
+                .codeUtilisateur(newPorteurDto.getCodeUtilisateur())
+                .build();
 
         return porteurRepository.save(nouveauPorteurEntity);
     }

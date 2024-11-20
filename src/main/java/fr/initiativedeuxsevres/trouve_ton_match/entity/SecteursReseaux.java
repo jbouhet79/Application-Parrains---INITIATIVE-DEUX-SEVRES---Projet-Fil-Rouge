@@ -20,7 +20,9 @@ public class SecteursReseaux {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    @Column(name = "secteurs_reseaux")
+    // private List<Long> name;
+    private List<String> name;
 
     @ManyToMany(mappedBy = "secteursReseauxList")
     private List<Utilisateur> utilisateurs;

@@ -21,7 +21,7 @@ public class UtilisateurDto {
     protected String entrepriseUtilisateur;
     protected String plateformeUtilisateur;
     protected String codeUtilisateur;
-    protected String type;
+    protected String type = "Parrain";
     protected List<Long> accompagnementTypeList;
     protected List<Long> secteursReseauxList;
 
