@@ -9,6 +9,7 @@ import Ressources from './pages/Ressources/Ressources';
 import Indicateurs from './pages/Indicateurs/Indicateurs';
 import Connexion from './pages/Connexion/Connexion';
 import CreationCompte from './pages/CreationCompte/CreationCompte';
+import Filtres from './pages/Filtres/Filtres';
 import { AuthProvider } from './AuthContext';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path='/indicateurs' element={<Indicateurs/>}></Route>
         <Route path='/connexion' element={<Connexion/>}></Route>
         <Route path='/creationCompte' element={<CreationCompte/>}></Route>
+        <Route path='/filtres' element={<Filtres/>}></Route>
       </Routes>
     </AuthProvider>
   );

@@ -3,7 +3,7 @@ import Wrapper from '../../Wrapper/Index'
 const Indicateurs = () => {
   return (
     <Wrapper>
-      <h1>indicateurs</h1>;
+      <h1>Indicateurs</h1>;
     </Wrapper>
   )
 };

@@ -10,14 +10,23 @@ import { useAuth } from '../../AuthContext';
 
 
 
-const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/; // minimum 2 caractères pour les autres champs
+const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{1,}$/; // minimum 2 caractères pour les autres champs
 // const nomRegex = /^[A-ZÀ-ÿ\- ]{2,}$/; // NOM en MAJUSCULES
 // const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const MonCompteParrain = () => {
 
   // Initialisation des états des valeurs de utilisateurDto
-  const [utilisateurDto, setUtilisateurDto] = useState({
+  // const [utilisateurDto, setUtilisateurDto] = useState({
+  //   idUtilisateur: '',
+  //   presentationParcours: '',
+  //   branchesReseau: '',
+  //   domainesExpertise: '',
+  //   secteurGeographique: '',
+  //   disponibilites: '',
+  // });
+
+  const [parrainDto, setParrainDto] = useState({
     idUtilisateur: '',
     presentationParcours: '',
     branchesReseau: '',
@@ -30,11 +39,14 @@ const MonCompteParrain = () => {
   const location = useLocation(); // Ce hook permet d’accéder à l’objet location qui représente l’URL actuelle de l’application 
   const navigate = useNavigate();
 
-  // Réinitialisation des états des valeurs de utilisateurDto
+  const idUtilisateur = localStorage.getItem('idUtilisateur');
+  console.log('recupération de idUtilisateur:', idUtilisateur);
+
+  // Réinitialisation des états des valeurs de parrainDto
   // lorsque le composant est monté (c’est-à-dire lorsque la page est chargée ou actualisée).
   useEffect(() => {
-    setUtilisateurDto({
-      idUtilisateur: '',
+    setParrainDto({
+      idUtilisateur: idUtilisateur,
       presentationParcours: '',
       branchesReseau: '',
       domainesExpertise: '',
@@ -50,23 +62,24 @@ const MonCompteParrain = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!utilisateurDto.presentationParcours) newErrors.presentationParcours = 'La présentation du parcours est requis';
-    if (!utilisateurDto.branchesReseau) newErrors.branchesReseau = 'Le type de réseau est requis';
-    if (!utilisateurDto.domainesExpertise) newErrors.domainesExpertise = 'Le domaine d\'expertise est requis';
-    if (!utilisateurDto.secteurGeographique) newErrors.secteurGeographique = 'Le secteur géographique est requis';
-    if (!utilisateurDto.disponibilites) newErrors.disponibilites = 'Les disponibilités sont requises';
+    if (!parrainDto.presentationParcours || parrainDto.presentationParcours.trim() === '') newErrors.presentationParcours = 'La présentation du parcours est requis';
+    if (!parrainDto.branchesReseau || parrainDto.branchesReseau.trim() === '') newErrors.branchesReseau = 'Le type de réseau est requis';
+    if (!parrainDto.domainesExpertise || parrainDto.domainesExpertise.trim() === '') newErrors.domainesExpertise = 'Le domaine d\'expertise est requis';
+    if (!parrainDto.secteurGeographique || parrainDto.secteurGeographique.trim() === '') newErrors.secteurGeographique = 'Le secteur géographique est requis';
+    if (!parrainDto.disponibilites || parrainDto.disponibilites.trim() === '') newErrors.disponibilites = 'Les disponibilités sont requises';
 
     return newErrors;
   };
 
 
-  // Met à jour dynamiquement les propriétés de utilisateurDto à chaque changer de valeur
+  // Met à jour dynamiquement les propriétés de parrainDto à chaque changer de valeur
   const handleChange = (name, value) => {
-    setUtilisateurDto({
-      ...utilisateurDto,
-      // L’opérateur de décomposition (...utilisateurDto) est utilisé pour copier toutes les propriétés existantes de utilisateurDto.
+    setParrainDto({
+      ...parrainDto,
+      // L’opérateur de décomposition (...parrainDto) est utilisé pour copier toutes les propriétés existantes de parrainDto.
       [name]: value
     });
+    console.log("Valeurs mises à jour:", { ...parrainDto, [name]: value }); // Log des valeurs mises à jour
 
     // Validation des champs
     const newErrors = { ...errors };
@@ -84,33 +97,58 @@ const MonCompteParrain = () => {
   // Cela permet de garder l’interface utilisateur synchronisée avec les données du serveur.
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Formulaire soumis"); // Formulaire soumis
 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
+      console.log("Erreurs de validation:", validationErrors); // Tous les champs sont-ils remplis ?
       setErrors(validationErrors);
       return;
     }
 
-    fetch('http://localhost:8080/creationCompte/createutilisateur', {
+    console.log("Données envoyées:", parrainDto);
+    console.log("Données envoyées (JSON.stringify):", JSON.stringify(parrainDto));
+    fetch('http://localhost:8080/creationCompte/completercompteparrain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(utilisateurDto)
+      body: JSON.stringify(parrainDto)
     })
-      .then(response => response.json())
-      .then(data => {
-        if (data.exists) {
-          //login(); // Mettre à jour l'état de connexion
-          // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
-          navigate('/filtres'); // Rediriger vers la page : filtres -> "Secteurs/Réseaux et Type d'accompagnement"
-        } else {
-          //setUserNotFound(true); // Afficher le message "Utilisateur inconnu"
-        }
-      })
-      .catch(error => {
-        console.error('Erreur lors de la soumission du formulaire!', error);
-      });
+    .then(response => {
+      console.log("Réponse du serveur:", response);  // reponse du serveur après la requête
+      if (!response.ok) {
+        return response.json().then(err => { throw new Error(err.message || 'Erreur inconnue'); });
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Données reçues du serveur:", data);
+      if (data && data.idUtilisateur) {
+        console.log('Utilisateur trouvé, id:', data.idUtilisateur);
+        console.log('presentationParcours:', data.presentationParcours);
+
+        // Mettez à jour l'état ici après avoir reçu la réponse
+        setParrainDto({
+          idUtilisateur: data.idUtilisateur, // Assurez-vous que l'ID est récupéré correctement
+          presentationParcours: data.presentationParcours || '',
+          branchesReseau: data.branchesReseau || '',
+          domainesExpertise: data.domainesExpertise || '',
+          secteurGeographique: data.secteurGeographique || '',
+          disponibilites: data.disponibilites || '',
+          type: data.type || '', // Ajoutez le type si nécessaire
+        });
+
+        // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
+        navigate('/filtres'); // Rediriger vers la page : filtres -> "Secteurs/Réseaux et Type d'accompagnement"
+      } else {
+        console.log("else data.exists")
+        // setUserNotFound(true); // Afficher le message "Utilisateur inconnu"
+      }
+    })
+    .catch(error => {
+      console.error('Erreur lors de la soumission du formulaire!', error);
+    });
   }
 
   return (
@@ -125,23 +163,24 @@ const MonCompteParrain = () => {
           setValue={(value) => handleChange('presentationParcours', value)}
           label="Rapide présentation du parcours :"
           name="presentationParcours"
-          value={utilisateurDto.presentationParcours}
+          value={parrainDto.presentationParcours}
           regex={otherRegex}
         />
 
         {errors.branchesReseau && <div className="error">{errors.branchesReseau}</div>}
-        <ChampSaisie setValue={(value) => handleChange('branchesReseau', value)} label="Branches sur lesquelles il a un bon réseau :" name="branchesReseau" value={utilisateurDto.branchesReseau} regex={otherRegex} ></ChampSaisie>
+        <ChampSaisie setValue={(value) => handleChange('branchesReseau', value)} label="Branches sur lesquelles il a un bon réseau :" name="branchesReseau" value={parrainDto.branchesReseau} regex={otherRegex} ></ChampSaisie>
 
         {errors.domainesExpertise && <div className="error">{errors.domainesExpertise}</div>}
-        <ChampSaisie setValue={(value) => handleChange('domainesExpertise', value)} value={utilisateurDto.domainesExpertise} label="Domaine d’expertise particulier :" name="domainesExpertise" regex={otherRegex}  ></ChampSaisie>
+        <ChampSaisie setValue={(value) => handleChange('domainesExpertise', value)} value={parrainDto.domainesExpertise} label="Domaine d’expertise particulier :" name="domainesExpertise" regex={otherRegex}  ></ChampSaisie>
 
         {errors.secteurGeographique && <div className="error">{errors.secteurGeographique}</div>}
-        <ChampSaisie setValue={(value) => handleChange('secteurGeographique', value)} value={utilisateurDto.secteurGeographique} label="Lieux sur lesquels il souhaite se déplacer :" name="secteurGeographique" regex={otherRegex}  ></ChampSaisie>
+        <ChampSaisie setValue={(value) => handleChange('secteurGeographique', value)} value={parrainDto.secteurGeographique} label="Lieux sur lesquels il souhaite se déplacer :" name="secteurGeographique" regex={otherRegex}  ></ChampSaisie>
 
         {errors.disponibilites && <div className="error">{errors.disponibilites}</div>}
-        <ChampSaisie setValue={(value) => handleChange('disponibilites', value)} label="Disponibilités :" value={utilisateurDto.disponibilites} name="disponibilites" regex={otherRegex}  ></ChampSaisie>
+        <ChampSaisie setValue={(value) => handleChange('disponibilites', value)} label="Disponibilités :" value={parrainDto.disponibilites} name="disponibilites" regex={otherRegex}  ></ChampSaisie>
 
-        {errors.type && <div className="error">{errors.type}</div>}
+        {/* {errors.type && <div className="error">{errors.type}</div>} */}
+
 
         <Container fluid>
           <div className="position-bouton">
@@ -163,7 +202,7 @@ const MonCompteParrain = () => {
                       disabled
                       name="idUtilisateur"
                       id="idUtilisateur"
-                      value={utilisateurDto.idUtilisateur}
+                      value={parrainDto.idUtilisateur}
                     />
                   </div>
                 </div>

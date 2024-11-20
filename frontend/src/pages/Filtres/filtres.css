@@ -1,16 +1,12 @@
-.form-label {
+/* .form-label {
     background-color: #e7ffcc;
-    padding: 5px 50px 5px 10px;
+    padding: 5px 10px 50px 10px;
     margin-bottom: 0px;
     border-radius: 5px;
-}
+} */
 
-.form-label-type {
-    background-color: #e7ffcc;
-    padding: 5px 50px 5px 10px;
-    margin-bottom: 0px;
-    border-radius: 5px;
-    width: 250px;
+.form-custom {
+    padding: 0;
 }
 
 .titre{
@@ -18,16 +14,44 @@
     max-height: 50px;
 }
 
-.custom-container {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+.checkbox-label {
+    display: flex;
+    justify-content: space-between; /* Aligne le texte à gauche et la case à cocher à droite */
+    align-items: center; /* Centre verticalement le texte et la case à cocher */
+    background-color: rgb(255, 255, 255, 0.8);
+    padding: 5px 10px 5px 10px;
+    margin-top: 10px;
+    /* margin-bottom: 0px; */
+    border-radius: 5px;
+    width: 90%;
+    height: 20px;
+
+
 }
 
-.custom-container .custom-input {
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 1800rem;
+    /* padding: 1%; */
+
+}
+
+.column {
+    width: 50%; /* Ajustez la largeur selon vos besoins */
+    padding: 10px;
+}
+
+/* .custom-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+} */
+
+/* .custom-container .custom-input {
     background-color: rgb(255, 255, 255, 0.8);
     color: black ;
     border: none ;
-}
+} */
 
 /* .custom-container .custom-id {
     background-color: rgb(255, 255, 255, 1);
@@ -38,11 +62,12 @@
 
 .text {
     color: white;
-    font-size: xx-large;
+    font-size: large;
     background-color: #FF165D;
-    padding: 5px 40px 10px 40px;
+    padding: 5px 0px 5px 40px;
     border-radius: 10px;
     margin: 0;
+    width: 300px
 }
 
 .error {
@@ -60,6 +85,7 @@
     padding: 4px 15px 6px 20px;
     border-radius: 10px;
     font-size: medium;
+    margin-right: 200px;
 }
 
 .img-send {
@@ -71,34 +97,10 @@
 .position-bouton {
     display: flex;
     justify-content: end;
+    margin-right: 100px;
 }
 
-.radio-label {
-    margin-right: 20px;
-}
-
-.radio-input {
-    margin-right: 10px; /* Ajoute un espace entre le bouton et le texte */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-
-    border: 2px solid #000000;
-    transition: 0.2s all linear;
-    margin-right: 5px;
-
-    position: relative;
-    top: 4px;
-}
   
-input:checked {
-border: 6px solid black;
-}
-
 button,
 legend {
 color: white;

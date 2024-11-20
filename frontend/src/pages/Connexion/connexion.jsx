@@ -15,6 +15,7 @@ const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie
 const Connexion = () => {
 
     const [utilisateurDto, setUtilisateurDto] = useState({
+        // idUtilisateur:'',
         nomUtilisateur: '',
         prenomUtilisateur: '',
         codeUtilisateur: '',
@@ -53,6 +54,18 @@ const Connexion = () => {
         setUserNotFound(false);
     };
 
+    // const sauvegarderIdUtilisateur = (idUtilisateur, value) => {
+
+    //     setUtilisateurDto({
+    //         ...utilisateurDto,
+    //         [idUtilisateur]: value
+    //     // const [idUtilisateur, setIdUtilisateur] = useState(0);
+    //     // setIdUtilisateur(data.idUtilisateur);
+    //     // useEffect(() => {
+    //     //     console.log('idUtilisateur changed!')
+    //     // }, [idUtilisateur]);
+    // });
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -71,23 +84,41 @@ const Connexion = () => {
             },
             body: JSON.stringify(utilisateurDto)
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.id) {
-                    login(); // Mettre à jour l'état de connexion
-                    // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
-                    if (data.type === 'Parrain') {
-                        navigate('/monCompteParrain'); // Rediriger vers la page "monCompteParrain"
-                    } else {
-                        navigate('/monComptePorteur'); // Rediriger vers la page "monComptePorteur"
-                    }
+        .then(response => response.json())
+        .then(data => {
+            if (data.idUtilisateur) {
+                console.log('Utilisateur trouvé, id:', data.idUtilisateur);
+                localStorage.setItem('idUtilisateur', data.idUtilisateur);
+
+                // Mettez à jour l'état ici après avoir reçu la réponse
+                setUtilisateurDto({
+                    idUtilisateur: data.idUtilisateur, // Assurez-vous que l'ID est récupéré correctement
+                    // presentationParcours: data.presentationParcours || '',
+                    // branchesReseau: data.branchesReseau || '',
+                    // domainesExpertise: data.domainesExpertise || '',
+                    // secteurGeographique: data.secteurGeographique || '',
+                    // disponibilites: data.disponibilites || '',
+                    // type: data.type || '', // Ajoutez le type si nécessaire
+                });
+
+                // sauvegarderIdUtilisateur();
+
+                login(); // Mettre à jour l'état de connexion
+                // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
+                console.log('Utilisateur trouvé, type:', data.type);
+                if (data.type === 'Parrain') {
+                    navigate('/monCompteParrain'); // Rediriger vers la page "monCompteParrain"
                 } else {
-                    setUserNotFound(true); // Afficher le message "Utilisateur inconnu"
+                    navigate('/monComptePorteur'); // Rediriger vers la page "monComptePorteur"
                 }
-            })
-            .catch(error => {
-                console.error('Erreur lors de la soumission du formulaire!', error);
-            });
+            } else {
+                setUserNotFound(true); // Afficher le message "Utilisateur inconnu"
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la soumission du formulaire!', error);
+        });
+
     };
 
     return (
