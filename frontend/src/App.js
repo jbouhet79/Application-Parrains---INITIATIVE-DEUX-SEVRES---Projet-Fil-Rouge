@@ -1,15 +1,15 @@
 // import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Accueil from './pages/Accueil/Accueil';
-import MonCompteParrain from './pages/MonCompteParrain/MonCompteParrain';
-import Profils from './pages/Profils/Profils';
-import Matchs from './pages/Matchs/Matchs';
-import Messages from './pages/Messages/Messages';
-import Ressources from './pages/Ressources/Ressources';
-import Indicateurs from './pages/Indicateurs/Indicateurs';
-import Connexion from './pages/Connexion/Connexion';
-import CreationCompte from './pages/CreationCompte/CreationCompte';
-import Filtres from './pages/Filtres/Filtres';
+import Accueil from './pages/Accueil/accueil';
+import MonCompteParrain from './pages/MonCompteParrain/monCompteParrain';
+import Profils from './pages/Profils/profils';
+import Matchs from './pages/Matchs/matchs';
+import Messages from './pages/Messages/messages';
+import Ressources from './pages/Ressources/ressources';
+import Indicateurs from './pages/Indicateurs/indicateurs';
+import Connexion from './pages/Connexion/connexion';
+import CreationCompte from './pages/CreationCompte/creationCompte';
+import Filtres from './pages/Filtres/filtres';
 import { AuthProvider } from './AuthContext';
 
 function App() {

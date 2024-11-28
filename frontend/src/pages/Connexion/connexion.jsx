@@ -1,6 +1,6 @@
-import Wrapper from '../../Wrapper/Index'
+import Wrapper from '../../Wrapper/index'
 import { useEffect, useState } from "react";
-import { ChampSaisie } from '../CreationCompte/ChampSaisie';
+import { ChampSaisie } from '../CreationCompte/champSaisie';
 import '../CreationCompte/creationCompte.css';
 import './connexion.css';
 import Container from 'react-bootstrap/esm/Container';
