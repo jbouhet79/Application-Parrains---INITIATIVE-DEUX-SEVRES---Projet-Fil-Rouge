@@ -124,14 +124,6 @@ public class UtilisateurController {
 
         Parrain updatedParrain = parrainService.save(parrain);
         return ResponseEntity.ok(updatedParrain);
-
-        // try {
-        // Parrain updatedParrain = parrainService.save(parrain);
-        // return ResponseEntity.ok(updatedParrain);
-        // } catch (Exception e) {
-        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        // .body("Erreur lors de la sauvegarde : " + e.getMessage());
-        // }
     }
 
     @PostMapping(value = "/accompagnementutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)

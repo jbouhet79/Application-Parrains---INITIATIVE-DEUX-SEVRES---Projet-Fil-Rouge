@@ -99,7 +99,7 @@ public class PorteurService {
 //    }
 
 
-    public Porteur completerComptePorteur(Long idUtilisateur, String dateLancement, String domaine, String besoins, String lieuActivite, String disponibilites) {
+    public Porteur completerComptePorteur(Long idUtilisateur, String dateLancement, String domaine, String descriptifActivite, String besoins, String lieuActivite, String disponibilites) {
         // Récupérer le parrain par son ID
         Porteur porteur = porteurRepository.findById(idUtilisateur)
                 .orElseThrow(() -> new RuntimeException("Porteur non trouvé"));
@@ -107,6 +107,7 @@ public class PorteurService {
         // Mettre à jour les champs du porteur
         porteur.setDateLancement(dateLancement);
         porteur.setDomaine(domaine);
+        porteur.setDescriptifActivite(descriptifActivite);
         porteur.setBesoins(besoins);
         porteur.setLieuActivite(lieuActivite);
         porteur.setDisponibilites(disponibilites);

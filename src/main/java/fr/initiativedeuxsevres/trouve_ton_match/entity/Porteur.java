@@ -17,6 +17,7 @@ public class Porteur extends Utilisateur  {
 
     private String dateLancement;
     private String domaine;
+    private String descriptifActivite;
     private String besoins;
     private String lieuActivite;
     private String disponibilites;
@@ -38,12 +39,13 @@ public class Porteur extends Utilisateur  {
      * @param codeUtilisateur
      * @param dateLancement
      * @param domaine
+     * @param descriptifActivite
      * @param besoins
      * @param lieuActivite
      * @param disponibilites
      */
     public Porteur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur, String entrepriseUtilisateur,
-                   String plateformeUtilisateur, String codeUtilisateur, String dateLancement, String domaine,
+                   String plateformeUtilisateur, String codeUtilisateur, String dateLancement, String domaine, String descriptifActivite,
                    String besoins, String lieuActivite, String disponibilites) {
 
         // Appel au constructeur de la classe mère
@@ -51,6 +53,7 @@ public class Porteur extends Utilisateur  {
 
         this.dateLancement = dateLancement;
         this.domaine = domaine;
+        this.descriptifActivite = descriptifActivite;
         this.besoins = besoins;
         this.lieuActivite = lieuActivite;
         this.disponibilites = disponibilites;
