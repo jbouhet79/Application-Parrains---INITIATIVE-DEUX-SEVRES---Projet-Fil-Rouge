@@ -43,7 +43,7 @@ export function ChampSaisie({setValue, label, name, value, regex}) {
                             value={value}
                             name={name}
                             onBlur={
-                                () => addMsgError('Votre nom doit être au bon format!', setFocusInput, validInput)
+                                () => addMsgError('Format de saisie non respecté !', setFocusInput, validInput)
                             }
                             onFocus={() => { setFocusInput(true) }}
                             type="text"

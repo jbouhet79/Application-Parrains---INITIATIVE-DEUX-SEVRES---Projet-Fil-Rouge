@@ -1,0 +1,138 @@
+/* .form-label {
+    background-color: #e7ffcc;
+    padding: 5px 10px 50px 10px;
+    margin-bottom: 0px;
+    border-radius: 5px;
+} */
+
+.form-custom {
+    padding: 0;
+}
+
+.titre{
+    margin-top: 15px;
+    max-height: 50px;
+}
+
+.checkbox-label {
+    display: flex;
+    justify-content: space-between; /* Aligne le texte à gauche et la case à cocher à droite */
+    align-items: center; /* Centre verticalement le texte et la case à cocher */
+    background-color: rgb(255, 255, 255, 0.8);
+    padding: 0px 10px 0px 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    width: 90%;
+    height: 20px;
+    height: auto; /* Ajouté pour s'assurer que la hauteur s'ajuste automatiquement */
+}
+
+.colonne-droite {
+    margin-top: 60px;
+    /* padding-bottom: 50px; */
+}
+
+/* inutile pour le moment
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  } */
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 1800rem;
+    /* padding: 1%; */
+
+}
+
+/* .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: flex-end;
+    padding: 10px;
+    height: 50%;
+} */
+
+/* .custom-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+} */
+
+/* .custom-container .custom-input {
+    background-color: rgb(255, 255, 255, 0.8);
+    color: black ;
+    border: none ;
+} */
+
+/* .custom-container .custom-id {
+    background-color: rgb(255, 255, 255, 1);
+    color: black ;
+    border: none ;
+
+} */
+
+.text {
+    color: white;
+    font-size: medium;
+    background-color: #FF165D;
+    padding: 5px 30px 5px 30px;
+    border-radius: 10px;
+    margin: 0;
+    display: inline-block; /* Ajouté pour adapter la longueur au contenu */
+    width: auto; /* Ajouté pour s'assurer que la largeur s'ajuste automatiquement */
+}
+
+.error {
+    color: #FF165D;
+    font-size: 0.875em;
+    margin-top: 0.25em;
+}
+
+.bouton-envoyer {
+    display: flex;
+    align-items: center;
+    color: white;
+    border: none;
+    background-color: #FF165D;
+    padding: 4px 15px 6px 20px;
+    border-radius: 10px;
+    font-size: medium;
+    margin-right: 200px;
+}
+
+.img-send {
+    padding-right: 0px;
+    padding-left: 10px;
+    height: 15px;
+}
+
+.position-bouton {
+    display: flex;
+    justify-content: end;
+    margin-right: 100px;
+}
+
+  
+button,
+legend {
+color: white;
+background-color: black;
+padding: 5px 10px;
+border-radius: 0;
+border: 0;
+font-size: 14px;
+}
+
+button:hover,
+button:focus {
+color: #999;
+}
+
+button:active {
+background-color: white;
+color: black;
+outline: 1px solid black;
+}

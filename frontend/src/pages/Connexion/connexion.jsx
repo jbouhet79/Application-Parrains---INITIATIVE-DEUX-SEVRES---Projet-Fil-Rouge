@@ -1,6 +1,6 @@
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 import { useEffect, useState } from "react";
-import { ChampSaisie } from '../CreationCompte/champSaisie';
+import { ChampSaisie } from '../CreationCompte/ChampSaisie';
 import '../CreationCompte/creationCompte.css';
 import './connexion.css';
 import Container from 'react-bootstrap/esm/Container';
@@ -14,7 +14,8 @@ const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie
 
 const Connexion = () => {
 
-  const [utilisateurDto, setUtilisateurDto] = useState({
+    const [utilisateurDto, setUtilisateurDto] = useState({
+        // idUtilisateur:'',
         nomUtilisateur: '',
         prenomUtilisateur: '',
         codeUtilisateur: '',
@@ -26,14 +27,14 @@ const Connexion = () => {
     const { login } = useAuth();
 
     const validate = () => {
-      const newErrors = {};
-  
-      if (!utilisateurDto.nomUtilisateur) newErrors.nomUtilisateur = 'Le nom est requis';
-      if (!utilisateurDto.prenomUtilisateur) newErrors.prenomUtilisateur = 'Le prénom est requis';
-      if (!utilisateurDto.codeUtilisateur) newErrors.codeUtilisateur = 'Le code d\'accès est requis';
-  
-      return newErrors;
-  };
+        const newErrors = {};
+
+        if (!utilisateurDto.nomUtilisateur) newErrors.nomUtilisateur = 'Le nom est requis';
+        if (!utilisateurDto.prenomUtilisateur) newErrors.prenomUtilisateur = 'Le prénom est requis';
+        if (!utilisateurDto.codeUtilisateur) newErrors.codeUtilisateur = 'Le code d\'accès est requis';
+
+        return newErrors;
+    };
 
     const handleChange = (name, value) => {
         setUtilisateurDto({
@@ -52,6 +53,18 @@ const Connexion = () => {
         // Réinitialiser userNotFound à false lorsque l'utilisateur modifie un champ
         setUserNotFound(false);
     };
+
+    // const sauvegarderIdUtilisateur = (idUtilisateur, value) => {
+
+    //     setUtilisateurDto({
+    //         ...utilisateurDto,
+    //         [idUtilisateur]: value
+    //     // const [idUtilisateur, setIdUtilisateur] = useState(0);
+    //     // setIdUtilisateur(data.idUtilisateur);
+    //     // useEffect(() => {
+    //     //     console.log('idUtilisateur changed!')
+    //     // }, [idUtilisateur]);
+    // });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -73,9 +86,33 @@ const Connexion = () => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.exists) {
+            if (data.idUtilisateur) {
+                console.log('Utilisateur trouvé, id:', data.idUtilisateur);
+                console.log('Utilisateur trouvé, data:', data);
+
+                localStorage.setItem('idUtilisateur', data.idUtilisateur);
+
+                // Mettez à jour l'état ici après avoir reçu la réponse
+                setUtilisateurDto({
+                    idUtilisateur: data.idUtilisateur, // Assurez-vous que l'ID est récupéré correctement
+                    // presentationParcours: data.presentationParcours || '',
+                    // branchesReseau: data.branchesReseau || '',
+                    // domainesExpertise: data.domainesExpertise || '',
+                    // secteurGeographique: data.secteurGeographique || '',
+                    // disponibilites: data.disponibilites || '',
+                    // type: data.type || '', // Ajoutez le type si nécessaire
+                });
+
+                // sauvegarderIdUtilisateur();
+
                 login(); // Mettre à jour l'état de connexion
-                navigate('/monCompte'); // Rediriger vers la page "monCompte"
+                // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
+                console.log('Utilisateur trouvé, type:', data.typeUtilisateur);
+                if (data.typeUtilisateur === 'parrain') {
+                    navigate('/monCompteParrain'); // Rediriger vers la page "monCompteParrain"
+                } else {
+                    navigate('/monComptePorteur'); // Rediriger vers la page "monComptePorteur"
+                }
             } else {
                 setUserNotFound(true); // Afficher le message "Utilisateur inconnu"
             }
@@ -83,52 +120,53 @@ const Connexion = () => {
         .catch(error => {
             console.error('Erreur lors de la soumission du formulaire!', error);
         });
+
     };
 
-    return  (
-      <Wrapper>
-        <div className='titre'>
+    return (
+        <Wrapper>
+            <div className='titre'>
                 <h1 className='text'>Se connecter</h1>
             </div>
             <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
-                
-              {errors.prenomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
-              <ChampSaisie
-                  setValue={(value) => handleChange('nomUtilisateur', value)}
-                  label="Nom :"
-                  name="nomUtilisateur"
-                  value={utilisateurDto.nomUtilisateur}
-                  regex={nomRegex}
-              />
-              
-              {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
-              <ChampSaisie  setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur"  value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
-              
-              {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
-              <ChampSaisie  setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur"  regex={codeRegex}  ></ChampSaisie>
 
-              <Container fluid>
-                <div className="position-bouton d-flex align-items-center justify-content-end">
-                    {userNotFound && (
-                      <div>
-                          <input
-                              className="error-input"
-                              value="Utilisateur inconnu"
-                              disabled
-                          />
-                        </div>
-                    )}
-                    <button
-                        type="submit"
-                        className="bouton-suivant"
-                    >
-                        Suivant
-                    </button>
-                </div>
-              </Container>
+                {errors.prenomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
+                <ChampSaisie
+                    setValue={(value) => handleChange('nomUtilisateur', value)}
+                    label="Nom :"
+                    name="nomUtilisateur"
+                    value={utilisateurDto.nomUtilisateur}
+                    regex={nomRegex}
+                />
+
+                {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
+                <ChampSaisie setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur" value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
+
+                {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
+                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={codeRegex}  ></ChampSaisie>
+
+                <Container fluid>
+                    <div className="position-bouton d-flex align-items-center justify-content-end">
+                        {userNotFound && (
+                            <div>
+                                <input
+                                    className="error-input"
+                                    value="Utilisateur inconnu"
+                                    disabled
+                                />
+                            </div>
+                        )}
+                        <button
+                            type="submit"
+                            className="bouton-suivant"
+                        >
+                            Suivant
+                        </button>
+                    </div>
+                </Container>
             </form>
-      </Wrapper>
+        </Wrapper>
     )
-  };
-  
-  export default Connexion;
+};
+
+export default Connexion;

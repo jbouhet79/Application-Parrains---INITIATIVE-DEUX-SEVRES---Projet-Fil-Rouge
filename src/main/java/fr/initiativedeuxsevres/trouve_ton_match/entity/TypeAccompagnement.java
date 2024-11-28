@@ -17,11 +17,11 @@ import java.util.List;
 public class TypeAccompagnement {
 
     @Id
-    @GeneratedValue
     private Long id;
 
-    private String name;
+    private String label;
 
     @ManyToMany(mappedBy = "accompagnementTypeList")
     private List<Utilisateur> utilisateurs;
+
 }

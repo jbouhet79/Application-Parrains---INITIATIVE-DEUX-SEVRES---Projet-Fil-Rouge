@@ -37,7 +37,7 @@ public class ParrainDto extends UtilisateurDto {
      * @param disponibilites
      */
     public ParrainDto(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur, String entrepriseUtilisateur,
-                      String plateformeUtilisateur, String codeUtilisateur,String presentationParcours,
+                      String plateformeUtilisateur, String codeUtilisateur, String presentationParcours,
                       String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {
 
 
@@ -48,6 +48,7 @@ public class ParrainDto extends UtilisateurDto {
         this.entrepriseUtilisateur = entrepriseUtilisateur;
         this.plateformeUtilisateur = plateformeUtilisateur;
         this.codeUtilisateur = codeUtilisateur;
+        this.typeUtilisateur = "parrain";
 
         // propriétés de la classe fille
         this.presentationParcours = presentationParcours;
@@ -86,6 +87,5 @@ public class ParrainDto extends UtilisateurDto {
         this.secteurGeographique = parrain.getSecteurGeographique();
         this.disponibilites = parrain.getDisponibilites();
     }
-
 
 }

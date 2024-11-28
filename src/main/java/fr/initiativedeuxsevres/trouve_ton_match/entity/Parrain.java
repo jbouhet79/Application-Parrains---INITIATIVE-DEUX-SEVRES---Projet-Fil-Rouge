@@ -1,5 +1,7 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
+import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -8,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=true)
-//@AllArgsConstructor
+@AllArgsConstructor
 //@NoArgsConstructor
 @SuperBuilder
 @Table(name= "parrain")
@@ -17,12 +19,28 @@ public class Parrain extends Utilisateur {
     /**
      * Propriétés de la classe
      */
+    @Column(name = "presentation_parcours")
     private String presentationParcours;
+
+    @Column(name = "branches_reseau")
     private String branchesReseau;
+
+    @Column(name = "domaines_expertise")
     private String domainesExpertise;
+
+    @Column(name = "secteur_geographique")
     private String secteurGeographique;
+
+    @Column(name = "disponibilites")
     private String disponibilites;
 
+//    @Builder.Default
+//    private String type = Parrain.class.getSimpleName();
+//    private TypeUtilisateur type;
+
+    public Parrain(){
+        super();
+    }
     /**
      * Constructeur avec tous les paramètres de la classe mère
      * @param idUtilisateur
@@ -43,7 +61,7 @@ public class Parrain extends Utilisateur {
                    String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {
 
         // Appel au constructeur de la classe mère
-        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur);
+        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur, "parrain");
 
         this.presentationParcours = presentationParcours;
         this.branchesReseau = branchesReseau;

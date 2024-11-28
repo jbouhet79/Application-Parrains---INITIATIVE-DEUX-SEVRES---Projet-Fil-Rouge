@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
+import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -14,37 +15,55 @@ import java.util.List;
 @Table(name = "utilisateur")
 public abstract class Utilisateur {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long idUtilisateur;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        protected Long idUtilisateur;
 
-    protected String nomUtilisateur;
-    protected String prenomUtilisateur;
-    protected String entrepriseUtilisateur;
-    protected String plateformeUtilisateur;
-    protected String codeUtilisateur;
+        protected String nomUtilisateur;
+        protected String prenomUtilisateur;
+        protected String entrepriseUtilisateur;
+        protected String plateformeUtilisateur;
+        protected String codeUtilisateur;
+        protected String typeUtilisateur;
 
-    @ManyToMany
-    @JoinTable(name = "accompagnements_utilisateurs",
-            joinColumns = @JoinColumn(name = "utilisateur"),
-            inverseJoinColumns = @JoinColumn(name = "accompagnement"))
-    protected List<TypeAccompagnement> accompagnementTypeList;
+//        @Column(nullable = false)
+//        @Enumerated(EnumType.STRING)
+//        protected TypeUtilisateur type;
 
-    @ManyToMany
-    @JoinTable(name = "secteurs_reseaux_utilisateurs",
-            joinColumns = @JoinColumn(name = "utilisateur"),
-            inverseJoinColumns = @JoinColumn(name = "secteurs_reseaux"))
-    protected List<SecteursReseaux> secteursReseauxList;
+        @ManyToMany
+        @JoinTable(name = "accompagnement_utilisateur", joinColumns = @JoinColumn(name = "id_utilisateur"), inverseJoinColumns = @JoinColumn(name = "id_accompagnement"))
+        protected List<TypeAccompagnement> accompagnementTypeList;
 
-    // Constructeur avec tous les champs
-    public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,
-                       String entrepriseUtilisateur, String plateformeUtilisateur, String codeUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-        this.nomUtilisateur = nomUtilisateur;
-        this.prenomUtilisateur = prenomUtilisateur;
-        this.entrepriseUtilisateur = entrepriseUtilisateur;
-        this.plateformeUtilisateur = plateformeUtilisateur;
-        this.codeUtilisateur = codeUtilisateur;
-    }
+        @ManyToMany
+        @JoinTable(name = "secteur_reseau_utilisateur", joinColumns = @JoinColumn(name = "id_utilisateur"), inverseJoinColumns = @JoinColumn(name = "id_secteur_reseau"))
+        protected List<SecteurReseau> secteurReseauList;
+
+        public Utilisateur() {
+        }
+
+        // Constructeur avec tous les champs
+        public Utilisateur(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,
+                        String entrepriseUtilisateur, String plateformeUtilisateur, String codeUtilisateur, String typeUtilisateur) {
+                this.idUtilisateur = idUtilisateur;
+                this.nomUtilisateur = nomUtilisateur;
+                this.prenomUtilisateur = prenomUtilisateur;
+                this.entrepriseUtilisateur = entrepriseUtilisateur;
+                this.plateformeUtilisateur = plateformeUtilisateur;
+                this.codeUtilisateur = codeUtilisateur;
+                this.typeUtilisateur = typeUtilisateur;
+
+                // Méthode pour obtenir le type en tant que String
+//                public String getTypeAsString() {
+//                        return type != null ? type.name() : null; // Renvoie le nom de l'enum ou null
+//                }
+        }
+
+        public String getTypeUtilisateur() {
+                return typeUtilisateur;
+        }
+
+        public void setTypeUtilisateur(String typeUtilisateur) {
+                this.typeUtilisateur = typeUtilisateur;
+        }
 
 }

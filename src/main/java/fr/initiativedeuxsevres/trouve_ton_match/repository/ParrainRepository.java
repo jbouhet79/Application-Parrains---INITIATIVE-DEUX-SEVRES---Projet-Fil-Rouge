@@ -12,8 +12,9 @@ public interface ParrainRepository extends JpaRepository<Parrain, Long> {
     // Méthode pour rechercher un utilisateur par codeUtilisateur.
     Parrain findByCodeUtilisateur(String codeUtilisateur);
 
-    boolean existsByNomUtilisateurAndPrenomUtilisateurAndCodeUtilisateur(String nom, String prenom, String code);
+    Optional<Parrain> findByNomUtilisateurAndPrenomUtilisateurAndCodeUtilisateur(String nom, String prenom, String code);
 
+//    Parrain findById(Long idUtilisateur);
 }
 
 

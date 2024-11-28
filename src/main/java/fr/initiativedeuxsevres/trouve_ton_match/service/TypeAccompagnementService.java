@@ -1,5 +1,8 @@
 package fr.initiativedeuxsevres.trouve_ton_match.service;
 
+import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
 import fr.initiativedeuxsevres.trouve_ton_match.repository.TypeAccompagnementRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +27,27 @@ public class TypeAccompagnementService {
      */
     public List<TypeAccompagnement> findAllById(List<Long> ids) {
         // Utiliser le repository pour trouver tous les TypeAccompagnement par IDs
-        return typeAccompagnementRepository.findAllById(ids);
+        List<TypeAccompagnement> result = typeAccompagnementRepository.findAllById(ids);
+        System.out.println("Types d'accompagnement trouvés : " + result);
+        return result;
+    }
+
+//    public List<TypeAccompagnement> findAll() {
+//        // Utiliser le repository pour trouver tous les TypeAccompagnement par IDs
+//        List<TypeAccompagnement> result = typeAccompagnementRepository.findAll();
+//        System.out.println("Types d'accompagnement trouvés : " + result);
+//        return result;
+//    }
+
+    public List<TypeAccompagnementDto> findAll() {
+        List<TypeAccompagnement> typesAccompagnement = typeAccompagnementRepository.findAll();
+        return typesAccompagnement.stream()
+                .map(typeAccompagnement -> new TypeAccompagnementDto(typeAccompagnement.getId(), typeAccompagnement.getLabel()))
+                .collect(Collectors.toList());
+    }
+
+    public void save(TypeAccompagnement typeAccompagnement) {
+        typeAccompagnementRepository.save(typeAccompagnement);
     }
 
     /**
@@ -41,21 +64,24 @@ public class TypeAccompagnementService {
                 .collect(Collectors.toSet());
 
         // Crée les nouveaux accompagnements pour les IDs manquants
-        List<TypeAccompagnement> nouveauxAccompagnements = ids.stream()
-                .filter(id -> !IdsExistants.contains(id))
-                .map(id -> TypeAccompagnement.builder().id(id).name("Nom par défaut " + id).build())
-                .collect(Collectors.toList());
-
-        // Sauvegarde les nouveaux accompagnements uniquement s'il y en a
-        List<TypeAccompagnement> accompagementsSauvegardes = Collections.emptyList();
-        if (!nouveauxAccompagnements.isEmpty()) {
-            accompagementsSauvegardes = typeAccompagnementRepository.saveAll(nouveauxAccompagnements);
-        }
+//        List<TypeAccompagnement> nouveauxAccompagnements = ids.stream()
+//                .filter(id -> !IdsExistants.contains(id))
+//                .map(id -> TypeAccompagnement.builder()
+//                        .id(id)
+//                        .label(Collections.singletonList("Accompagnement " + id)) // Liste de String
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        // Sauvegarde les nouveaux accompagnements uniquement s'il y en a
+//        List<TypeAccompagnement> accompagementsSauvegardes = Collections.emptyList();
+//        if (!nouveauxAccompagnements.isEmpty()) {
+//            accompagementsSauvegardes = typeAccompagnementRepository.saveAll(nouveauxAccompagnements);
+//        }
 
         // Combine les éléments existants et les nouveaux accompagnements dans une liste
         // Utilise un Set pour garantir l'unicité des éléments
         Set<TypeAccompagnement> accompagenemtsCombines = new HashSet<>(typeAccompagnementRepository.findAllById(ids));
-        accompagenemtsCombines.addAll(accompagementsSauvegardes);
+    //    accompagenemtsCombines.addAll(accompagementsSauvegardes);
 
         // Retourne une liste de tous les éléments combinés
         return new ArrayList<>(accompagenemtsCombines);

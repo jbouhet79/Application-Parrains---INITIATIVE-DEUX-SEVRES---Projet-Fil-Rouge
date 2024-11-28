@@ -38,7 +38,7 @@ public class PorteurDto extends UtilisateurDto {
      */
     public PorteurDto(Long idUtilisateur, String nomUtilisateur, String prenomUtilisateur,
                             String entrepriseUtilisateur,
-                            String plateformeUtilisateur, String codeUtilisateur, String dateLancement,
+                            String plateformeUtilisateur, String codeUtilisateur, String typeUtilisateur, String dateLancement,
                             String domaine, String besoins, String lieuActivite, String disponibilites) {
 
         // propriétés de la classe mère
@@ -48,6 +48,7 @@ public class PorteurDto extends UtilisateurDto {
         this.entrepriseUtilisateur = entrepriseUtilisateur;
         this.plateformeUtilisateur = plateformeUtilisateur;
         this.codeUtilisateur = codeUtilisateur;
+        this.typeUtilisateur = typeUtilisateur;
 
         // propriétés de la classe fille
         this.dateLancement = dateLancement;

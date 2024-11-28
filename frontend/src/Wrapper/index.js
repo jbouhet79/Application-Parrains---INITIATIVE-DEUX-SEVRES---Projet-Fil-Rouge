@@ -6,7 +6,7 @@ import './Footer.css';
 import './Header.css';
 
 
-const index = ({ children }) => {
+const Index = ({ children }) => {
     return (
         <>
             <Header />
@@ -19,4 +19,4 @@ const index = ({ children }) => {
     );
 };
 
-export default index;
+export default Index;

@@ -14,14 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table
-public class SecteursReseaux {
+public class SecteurReseau {
 
     @Id
-    @GeneratedValue
     private Long id;
 
-    private String name;
+    private String label;
 
-    @ManyToMany(mappedBy = "secteursReseauxList")
+    @ManyToMany(mappedBy = "secteurReseauList")
     private List<Utilisateur> utilisateurs;
 }

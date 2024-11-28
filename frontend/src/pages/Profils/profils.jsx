@@ -1,11 +1,11 @@
-import Wrapper from '../../Wrapper'
+import Wrapper from '../../Wrapper/Index'
 
-const profils = () => {
-    return  (
-      <Wrapper>
-        <h1>profils</h1>;
-      </Wrapper>
-    )
-  };
-  
-  export default profils;
+const Profils = () => {
+  return (
+    <Wrapper>
+      <h1>profils</h1>;
+    </Wrapper>
+  )
+};
+
+export default Profils;

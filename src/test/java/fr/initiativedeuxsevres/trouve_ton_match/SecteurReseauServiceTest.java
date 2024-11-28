@@ -1,8 +1,8 @@
 package fr.initiativedeuxsevres.trouve_ton_match;
 
-import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteursReseaux;
-import fr.initiativedeuxsevres.trouve_ton_match.repository.SecteursReseauxRepository;
-import fr.initiativedeuxsevres.trouve_ton_match.service.SecteursReseauxService;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
+import fr.initiativedeuxsevres.trouve_ton_match.repository.SecteurReseauRepository;
+import fr.initiativedeuxsevres.trouve_ton_match.service.SecteurReseauService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,41 +19,41 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SecteursReseauxServiceTest {
+public class SecteurReseauServiceTest {
 
     @Mock
-    private SecteursReseauxRepository secteursReseauxRepository;
+    private SecteurReseauRepository secteurReseauRepository;
 
     @InjectMocks
-    private SecteursReseauxService secteursReseauxService;
+    private SecteurReseauService secteurReseauService;
 
     @Test
-    public void sauvegarderListeSecteursReseaux() {
+    public void sauvegarderListeSecteurReseau() {
         // Création de la liste d'IDs à sauvegarder
         List<Long> ids = Collections.singletonList(1L);
 
-        // Création d'un objet SecteursReseaux à sauvegarder
-        SecteursReseaux mockSecteursReseaux = SecteursReseaux.builder()
+        // Création d'un objet SecteurReseau à sauvegarder
+        SecteurReseau mockSecteurReseau = SecteurReseau.builder()
                 .id(1L)
-                .name("SecteursReseaux Test")
+                .label("SecteurReseau Test")
                 .build();
 
         // Simule que l'objet est manquant en base de données
-        when(secteursReseauxRepository.findAllById(ids)).thenReturn(Collections.emptyList());
+        when(secteurReseauRepository.findAllById(ids)).thenReturn(Collections.emptyList());
 
         // Simule le comportement du repository pour sauvegarder l'objet manquant
-        when(secteursReseauxRepository.saveAll(anyList())).thenReturn(Collections.singletonList(mockSecteursReseaux));
+        when(secteurReseauRepository.saveAll(anyList())).thenReturn(Collections.singletonList(mockSecteurReseau));
 
         // Appel de la méthode de sauvegarde
-        List<SecteursReseaux> result = secteursReseauxService.sauvegarderListeSecteursReseaux(ids);
+        List<SecteurReseau> result = secteurReseauService.sauvegarderListeSecteurReseau(ids);
 
         // Vérification que l'objet retourné est bien celui sauvegardé
         assertNotNull(result, "La liste des objets sauvegardés ne doit pas être null");
         assertEquals(1, result.size(), "La liste doit contenir un seul objet sauvegardé");
-        assertEquals(mockSecteursReseaux.getId(), result.get(0).getId(), "L'ID de l'objet sauvegardé doit correspondre");
-        assertEquals(mockSecteursReseaux.getName(), result.get(0).getName(), "Le nom de l'objet sauvegardé doit correspondre");
+        assertEquals(mockSecteurReseau.getId(), result.get(0).getId(), "L'ID de l'objet sauvegardé doit correspondre");
+        assertEquals(mockSecteurReseau.getLabel(), result.get(0).getLabel(), "Le nom de l'objet sauvegardé doit correspondre");
 
         // Vérifie que la méthode saveAll du repository a été appelée une fois
-        verify(secteursReseauxRepository).saveAll(anyList());
+        verify(secteurReseauRepository).saveAll(anyList());
     }
 }
