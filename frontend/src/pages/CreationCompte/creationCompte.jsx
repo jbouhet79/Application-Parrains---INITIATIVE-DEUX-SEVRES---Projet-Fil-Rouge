@@ -1,7 +1,7 @@
-import Wrapper from '../../Wrapper/Index'
+import Wrapper from '../../Wrapper/index'
 import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { ChampSaisie } from './ChampSaisie';
+import { ChampSaisie } from './champSaisie';
 import './creationCompte.css';
 import Container from 'react-bootstrap/esm/Container';
 import send from '../../media/images/logos/send_blanc.png';

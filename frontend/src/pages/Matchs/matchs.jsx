@@ -1,4 +1,4 @@
-import Wrapper from '../../Wrapper/Index'
+import Wrapper from '../../Wrapper/index'
 
 const Matchs = () => {
   return (
