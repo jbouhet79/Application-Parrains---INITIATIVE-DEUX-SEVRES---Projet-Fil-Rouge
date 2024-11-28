@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
+import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -8,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=true)
-//@AllArgsConstructor
+@AllArgsConstructor
 //@NoArgsConstructor
 @SuperBuilder
 @Table(name= "porteur")
@@ -19,8 +20,10 @@ public class Porteur extends Utilisateur  {
     private String besoins;
     private String lieuActivite;
     private String disponibilites;
-    @Builder.Default
-    private String type = Porteur.class.getSimpleName();
+
+//    @Builder.Default
+//    private String type = Porteur.class.getSimpleName();
+//    private TypeUtilisateur type;
 
     public Porteur(){
         super();
@@ -44,13 +47,18 @@ public class Porteur extends Utilisateur  {
                    String besoins, String lieuActivite, String disponibilites) {
 
         // Appel au constructeur de la classe mère
-        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur);
+        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur, "porteur");
 
         this.dateLancement = dateLancement;
         this.domaine = domaine;
         this.besoins = besoins;
         this.lieuActivite = lieuActivite;
         this.disponibilites = disponibilites;
+
+        // Méthode pour obtenir le type en tant que String
+//        public String getTypeAsString() {
+//            return getType() != null ? getType().name() : null;
+//        }
     }
 
 }

@@ -88,6 +88,8 @@ const Connexion = () => {
         .then(data => {
             if (data.idUtilisateur) {
                 console.log('Utilisateur trouvé, id:', data.idUtilisateur);
+                console.log('Utilisateur trouvé, data:', data);
+
                 localStorage.setItem('idUtilisateur', data.idUtilisateur);
 
                 // Mettez à jour l'état ici après avoir reçu la réponse
@@ -105,8 +107,8 @@ const Connexion = () => {
 
                 login(); // Mettre à jour l'état de connexion
                 // Vérifiez si le type de l'utilisateur est "parrain" avant de naviguer
-                console.log('Utilisateur trouvé, type:', data.type);
-                if (data.type === 'Parrain') {
+                console.log('Utilisateur trouvé, type:', data.typeUtilisateur);
+                if (data.typeUtilisateur === 'parrain') {
                     navigate('/monCompteParrain'); // Rediriger vers la page "monCompteParrain"
                 } else {
                     navigate('/monComptePorteur'); // Rediriger vers la page "monComptePorteur"

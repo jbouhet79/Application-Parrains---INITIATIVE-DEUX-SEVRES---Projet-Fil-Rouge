@@ -21,7 +21,7 @@ const CreationCompte = () => {
         entrepriseUtilisateur: '',
         plateformeUtilisateur: '',
         codeUtilisateur: '',
-        type: ''
+        typeUtilisateur: ''
     });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -37,7 +37,7 @@ const CreationCompte = () => {
             entrepriseUtilisateur: '',
             plateformeUtilisateur: '',
             codeUtilisateur: '',
-            type: ''
+            typeUtilisateur: ''
         });
 
         setIsSubmitted(false);
@@ -53,7 +53,7 @@ const CreationCompte = () => {
         if (!utilisateurDto.entrepriseUtilisateur) newErrors.entrepriseUtilisateur = 'L\'entreprise est requise';
         if (!utilisateurDto.plateformeUtilisateur) newErrors.plateformeUtilisateur = 'La plateforme est requise';
         if (!utilisateurDto.codeUtilisateur) newErrors.codeUtilisateur = 'Le code d\'accès est requis';
-        if (!utilisateurDto.type) newErrors.type = 'Le type de profil est requis';
+        if (!utilisateurDto.typeUtilisateur) newErrors.type = 'Le type de profil est requis';
 
         return newErrors;
     };
@@ -118,6 +118,7 @@ const CreationCompte = () => {
             localStorage.setItem('idUtilisateur', data.idUtilisateur); // Stockage de l'id
             console.log('id:', utilisateurDto.idUtilisateur);
             console.log('nom:', utilisateurDto.nomUtilisateur);
+            console.log('type:', utilisateurDto.typeUtilisateur);
     
             setIsSubmitted(true); // Masquer le bouton après l'envoi
         })
@@ -162,8 +163,8 @@ const CreationCompte = () => {
                             type="radio"
                             name="type"
                             value="parrain"
-                            checked={utilisateurDto.type === 'parrain'}
-                            onChange={(e) => handleChange('type', e.target.value)}
+                            checked={utilisateurDto.typeUtilisateur === 'parrain'}
+                            onChange={(e) => handleChange('typeUtilisateur', e.target.value)}
                             class="radio-input"
                         />
                         Parrain
@@ -173,8 +174,8 @@ const CreationCompte = () => {
                             type="radio"
                             name="type"
                             value="porteur"
-                            checked={utilisateurDto.type === 'porteur'}
-                            onChange={(e) => handleChange('type', e.target.value)}
+                            checked={utilisateurDto.typeUtilisateur === 'porteur'}
+                            onChange={(e) => handleChange('typeUtilisateur', e.target.value)}
                             class="radio-input"
                         />
                         Porteur

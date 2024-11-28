@@ -17,13 +17,9 @@ import java.util.List;
 public class TypeAccompagnement {
 
     @Id
-    @GeneratedValue
     private Long id;
 
-    @Column(name = "accompagnement")
-    // private List<Long> name;
-     private List<String> name;
-    // private String name;
+    private String label;
 
     @ManyToMany(mappedBy = "accompagnementTypeList")
     private List<Utilisateur> utilisateurs;

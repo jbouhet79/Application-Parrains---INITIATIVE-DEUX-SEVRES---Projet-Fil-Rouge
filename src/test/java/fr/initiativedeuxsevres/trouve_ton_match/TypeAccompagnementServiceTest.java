@@ -32,7 +32,7 @@ public class TypeAccompagnementServiceTest {
         // Création d'un objet TypeAccompagnement à sauvegarder
         TypeAccompagnement mockAccompagnement = TypeAccompagnement.builder()
                 .id(1L)
-                .name("Accompagnement Test")
+                .label("Accompagnement Test")
                 .build();
 
         // Simule que l'objet est manquant en base de données
@@ -48,7 +48,7 @@ public class TypeAccompagnementServiceTest {
         assertNotNull(result, "La liste des objets sauvegardés ne doit pas être null");
         assertEquals(1, result.size(), "La liste doit contenir un seul objet sauvegardé");
         assertEquals(mockAccompagnement.getId(), result.get(0).getId(), "L'ID de l'objet sauvegardé doit correspondre");
-        assertEquals(mockAccompagnement.getName(), result.get(0).getName(), "Le nom de l'objet sauvegardé doit correspondre");
+        assertEquals(mockAccompagnement.getLabel(), result.get(0).getLabel(), "Le nom de l'objet sauvegardé doit correspondre");
 
         // Vérifie que la méthode saveAll du repository a été appelée une fois
         verify(typeAccompagnementRepository).saveAll(anyList());

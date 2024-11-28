@@ -19,15 +19,25 @@
     justify-content: space-between; /* Aligne le texte à gauche et la case à cocher à droite */
     align-items: center; /* Centre verticalement le texte et la case à cocher */
     background-color: rgb(255, 255, 255, 0.8);
-    padding: 5px 10px 5px 10px;
-    margin-top: 10px;
-    /* margin-bottom: 0px; */
+    padding: 0px 10px 0px 10px;
+    margin-top: 5px;
     border-radius: 5px;
     width: 90%;
     height: 20px;
-
-
+    height: auto; /* Ajouté pour s'assurer que la hauteur s'ajuste automatiquement */
 }
+
+.colonne-droite {
+    margin-top: 60px;
+    /* padding-bottom: 50px; */
+}
+
+/* inutile pour le moment
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  } */
 
 .container {
     display: flex;
@@ -37,10 +47,14 @@
 
 }
 
-.column {
-    width: 50%; /* Ajustez la largeur selon vos besoins */
+/* .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: flex-end;
     padding: 10px;
-}
+    height: 50%;
+} */
 
 /* .custom-container {
     background-color: rgba(255, 255, 255, 0.1);
@@ -62,12 +76,13 @@
 
 .text {
     color: white;
-    font-size: large;
+    font-size: medium;
     background-color: #FF165D;
-    padding: 5px 0px 5px 40px;
+    padding: 5px 30px 5px 30px;
     border-radius: 10px;
     margin: 0;
-    width: 300px
+    display: inline-block; /* Ajouté pour adapter la longueur au contenu */
+    width: auto; /* Ajouté pour s'assurer que la largeur s'ajuste automatiquement */
 }
 
 .error {

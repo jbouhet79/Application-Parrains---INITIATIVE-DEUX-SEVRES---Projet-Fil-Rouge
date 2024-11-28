@@ -1,5 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
+import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=true)
-//@AllArgsConstructor
+@AllArgsConstructor
 //@NoArgsConstructor
 @SuperBuilder
 @Table(name= "parrain")
@@ -33,8 +34,9 @@ public class Parrain extends Utilisateur {
     @Column(name = "disponibilites")
     private String disponibilites;
 
-    @Builder.Default
-    private String type = Parrain.class.getSimpleName();
+//    @Builder.Default
+//    private String type = Parrain.class.getSimpleName();
+//    private TypeUtilisateur type;
 
     public Parrain(){
         super();
@@ -59,7 +61,7 @@ public class Parrain extends Utilisateur {
                    String branchesReseau, String domainesExpertise, String secteurGeographique, String disponibilites) {
 
         // Appel au constructeur de la classe mère
-        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur);
+        super(idUtilisateur, nomUtilisateur, prenomUtilisateur, entrepriseUtilisateur, plateformeUtilisateur, codeUtilisateur, "parrain");
 
         this.presentationParcours = presentationParcours;
         this.branchesReseau = branchesReseau;

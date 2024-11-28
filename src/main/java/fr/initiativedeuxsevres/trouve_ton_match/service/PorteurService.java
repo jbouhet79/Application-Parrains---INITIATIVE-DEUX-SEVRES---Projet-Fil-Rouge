@@ -65,36 +65,38 @@ public class PorteurService {
                 .entrepriseUtilisateur(newPorteurDto.getEntrepriseUtilisateur())
                 .plateformeUtilisateur(newPorteurDto.getPlateformeUtilisateur())
                 .codeUtilisateur(newPorteurDto.getCodeUtilisateur())
+                .typeUtilisateur(newPorteurDto.getTypeUtilisateur())
                 .build();
 
         return porteurRepository.save(nouveauPorteurEntity);
     }
-
-    private static Porteur porteurDtoToEntity(PorteurDto newPorteurDto) {
-        Porteur nouveauPorteurEntity = new Porteur(
-                // --> id à null pour permettre la création d'autres comptes utilisateurs avec un nouvel id
-                // ==> si on veut toujours créer une nouvelle entité avec un nouvel ID
-                null,
-
-                // Cela signifie que chaque fois que cette méthode est appelée, une nouvelle entité sans ID (ou avec un ID généré automatiquement par la base de données) sera créée
-                //          newPorteurDto.getIdUtilisateur(),
-                //L’ID de l’entité Porteur est pris du DTO newPorteurDto.
-                // Cela permet de conserver l’ID existant de l’utilisateur si le DTO en contient un,
-                // ce qui peut être utile pour des opérations de mise à jour où l’ID doit être préservé.
-                // ==> si tu veux conserver l’ID de l’entité existante pour des opérations de mise à jour
-                newPorteurDto.getNomUtilisateur(),
-                newPorteurDto.getPrenomUtilisateur(),
-                newPorteurDto.getEntrepriseUtilisateur(),
-                newPorteurDto.getPlateformeUtilisateur(),
-                newPorteurDto.getCodeUtilisateur(),
-                newPorteurDto.getDateLancement(),
-                newPorteurDto.getDomaine(),
-                newPorteurDto.getBesoins(),
-                newPorteurDto.getLieuActivite(),
-                newPorteurDto.getDisponibilites()
-              );
-        return nouveauPorteurEntity;
-    }
+// A REVOIR +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//    private static Porteur porteurDtoToEntity(PorteurDto newPorteurDto) {
+//        Porteur nouveauPorteurEntity = new Porteur(
+//                // --> id à null pour permettre la création d'autres comptes utilisateurs avec un nouvel id
+//                // ==> si on veut toujours créer une nouvelle entité avec un nouvel ID
+//                null,
+//
+//                // Cela signifie que chaque fois que cette méthode est appelée, une nouvelle entité sans ID (ou avec un ID généré automatiquement par la base de données) sera créée
+//                //          newPorteurDto.getIdUtilisateur(),
+//                //L’ID de l’entité Porteur est pris du DTO newPorteurDto.
+//                // Cela permet de conserver l’ID existant de l’utilisateur si le DTO en contient un,
+//                // ce qui peut être utile pour des opérations de mise à jour où l’ID doit être préservé.
+//                // ==> si tu veux conserver l’ID de l’entité existante pour des opérations de mise à jour
+//                newPorteurDto.getNomUtilisateur(),
+//                newPorteurDto.getPrenomUtilisateur(),
+//                newPorteurDto.getEntrepriseUtilisateur(),
+//                newPorteurDto.getPlateformeUtilisateur(),
+//                newPorteurDto.getCodeUtilisateur(),
+//                newPorteurDto.getTypeUtilisateur(),
+//                newPorteurDto.getDateLancement(),
+//                newPorteurDto.getDomaine(),
+//                newPorteurDto.getBesoins(),
+//                newPorteurDto.getLieuActivite(),
+//                newPorteurDto.getDisponibilites()
+//              );
+//        return nouveauPorteurEntity;
+//    }
 
 
     public Porteur completerComptePorteur(Long idUtilisateur, String dateLancement, String domaine, String besoins, String lieuActivite, String disponibilites) {
