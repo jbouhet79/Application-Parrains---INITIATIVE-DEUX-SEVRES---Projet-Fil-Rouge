@@ -125,6 +125,7 @@ const MonCompteParrain = () => {
     .then(data => {
       console.log("Données reçues du serveur:", data);
       if (data && data.idUtilisateur) {
+        console.log('Utilisateur trouvé, nom:', data.nomUtilisateur);
         console.log('Utilisateur trouvé, id:', data.idUtilisateur);
         console.log('presentationParcours:', data.presentationParcours);
 
