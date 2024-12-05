@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class PorteurService {
@@ -113,6 +115,16 @@ public class PorteurService {
         porteur.setDisponibilites(disponibilites);
 
         // Sauvegarder le porteur mis à jour
+        return porteurRepository.save(porteur);
+    }
+
+    public Porteur findById(Long id) {
+        Optional<Porteur> porteur = porteurRepository.findById(id);
+        return porteur.isPresent() ? porteur.get() : null;
+    }
+
+    public Porteur save(Porteur porteur) {
+        System.out.println("Sauvegarde en cours pour : " + porteur);
         return porteurRepository.save(porteur);
     }
 }

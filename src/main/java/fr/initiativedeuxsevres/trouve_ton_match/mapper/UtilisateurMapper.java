@@ -18,7 +18,7 @@ public class UtilisateurMapper {
      * @param utilisateur L'entité Utilisateur à convertir.
      * @return Un UtilisateurDto correspondant.
      */
-    public UtilisateurDto toDto(Utilisateur utilisateur) {
+    public static UtilisateurDto toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
@@ -61,7 +61,7 @@ public class UtilisateurMapper {
      * @param secteursReseaux La liste des entités SecteurReseau correspondantes.
      * @return Une entité Utilisateur correspondant.
      */
-    public Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
+    public static Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
                                        List<SecteurReseauDto> secteursReseaux) {
         if (utilisateurDto == null) {
             return null;

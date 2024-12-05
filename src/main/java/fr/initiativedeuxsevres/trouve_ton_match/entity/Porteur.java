@@ -1,6 +1,6 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
-import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
+//import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;

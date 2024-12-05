@@ -76,6 +76,7 @@ public class ParrainService {
         // Récupérer le parrain par son ID
         Parrain parrain = parrainRepository.findById(idUtilisateur)
                 .orElseThrow(() -> new RuntimeException("Parrain non trouvé"));
+        System.out.println("Parrain récupéré dans completerCompteParrain: " + parrain);
 
         // Mettre à jour les champs du parrain
         parrain.setPresentationParcours(presentationParcours);
@@ -95,6 +96,7 @@ public class ParrainService {
 
     public Parrain save(Parrain parrain) {
         System.out.println("Sauvegarde en cours pour : " + parrain);
+        System.out.println("Sauvegarde en cours (nom) : " + parrain.getNomUtilisateur());
         return parrainRepository.save(parrain);
     }
 }

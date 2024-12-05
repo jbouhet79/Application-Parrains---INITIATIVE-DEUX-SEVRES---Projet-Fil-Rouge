@@ -1,11 +1,10 @@
 package fr.initiativedeuxsevres.trouve_ton_match.controller;
 
 import fr.initiativedeuxsevres.trouve_ton_match.dto.*;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.*;
 import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
+import fr.initiativedeuxsevres.trouve_ton_match.mapper.ParrainMapper;
+import fr.initiativedeuxsevres.trouve_ton_match.mapper.PorteurMapper;
 import fr.initiativedeuxsevres.trouve_ton_match.service.ParrainService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.PorteurService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.TypeAccompagnementService;
@@ -38,6 +37,11 @@ public class UtilisateurController {
     private final SecteurReseauService secteurReseauService;
 
     private final UtilisateurMapper utilisateurMapper;
+
+    private final ParrainMapper parrainMapper;
+
+    private final PorteurMapper porteurMapper;
+
 
     // @Autowired
     // public UtilisateurController(ParrainService parrainService, PorteurService
@@ -96,15 +100,52 @@ public class UtilisateurController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping(value = "/completercompteparrain", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PostMapping(value = "/completercompteparrain", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Parrain> completercompteparrain(@RequestBody ParrainDto parrainDto) {
+//
+//        System.out.println("Données reçues : " + parrainDto);
+//
+//        Parrain parrain = parrainService.findById(parrainDto.getIdUtilisateur());
+//
+//        // Vérifier si le parrain existe dans la base
+//        if (parrain == null) {
+//            // Si le parrain n'existe pas, retourner un objet Parrain vide
+//            Parrain emptyParrain = new Parrain();
+//            emptyParrain.setIdUtilisateur(parrainDto.getIdUtilisateur());
+//            System.out.println("Parrain introuvable, renvoi d'un objet vide.");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyParrain);
+//        }
+//
+//        System.out.println("Compte complété");
+//        System.out.println("id :" + parrainDto.getIdUtilisateur());
+//
+//        // Mise à jour des données
+//        parrain.setPresentationParcours(parrainDto.getPresentationParcours());
+//        parrain.setBranchesReseau(parrainDto.getBranchesReseau());
+//        parrain.setDomainesExpertise(parrainDto.getDomainesExpertise());
+//        parrain.setSecteurGeographique(parrainDto.getSecteurGeographique());
+//        parrain.setDisponibilites(parrainDto.getDisponibilites());
+//
+//        Parrain updatedParrainEntity = parrainMapper.toEntity(parrainDto);  // Utiliser un Mapper pour convertir le DTO en entité
+//        Parrain updatedParrain = parrainService.save(updatedParrainEntity);  // Sauvegarder l'entité dans la base
+//
+//
+////        Parrain updatedParrain = parrainService.save(parrain);
+//        return ResponseEntity.ok(updatedParrain);
+//    }
+
+    @PostMapping (value = "/completercompteparrain", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Parrain> completercompteparrain(@RequestBody ParrainDto parrainDto) {
 
         System.out.println("Données reçues : " + parrainDto);
 
-        Parrain parrain = parrainService.findById(parrainDto.getIdUtilisateur());
+        // Récupérer le parrain existant par son ID
+        Parrain parrainExistant = parrainService.findById(parrainDto.getIdUtilisateur());
+        System.out.println("Récupérer le parrain existant par son ID dans /completercompteparrain : " + parrainDto);
+        System.out.println("Récupérer le NOM du parrain existant par son ID dans /completercompteparrain : " + parrainDto.getNomUtilisateur());
 
         // Vérifier si le parrain existe dans la base
-        if (parrain == null) {
+        if (parrainExistant == null) {
             // Si le parrain n'existe pas, retourner un objet Parrain vide
             Parrain emptyParrain = new Parrain();
             emptyParrain.setIdUtilisateur(parrainDto.getIdUtilisateur());
@@ -112,18 +153,57 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyParrain);
         }
 
-        System.out.println("Compte complété");
-        System.out.println("id :" + parrainDto.getIdUtilisateur());
+        // Récupérer la liste des Accompagnements et Secteurs
+        List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll();
+        List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll();
 
-        // Mise à jour des données
-        parrain.setPresentationParcours(parrainDto.getPresentationParcours());
-        parrain.setBranchesReseau(parrainDto.getBranchesReseau());
-        parrain.setDomainesExpertise(parrainDto.getDomainesExpertise());
-        parrain.setSecteurGeographique(parrainDto.getSecteurGeographique());
-        parrain.setDisponibilites(parrainDto.getDisponibilites());
+        // Mapper le DTO en entité, en incluant les accompagnements et secteurs
+        Parrain updatedParrainEntity =  parrainMapper.toEntity(parrainDto, parrainExistant, accompagnements, secteursReseaux);
+        System.out.println("Entité mise à jour après le mapping : " + updatedParrainEntity);
+        System.out.println("parrainDto dans Mapper le DTO en entité: " + parrainDto);
+        System.out.println("updatedParrainEntity via Mapper le DTO en entité: " + updatedParrainEntity);
 
-        Parrain updatedParrain = parrainService.save(parrain);
+        // Sauvegarder l'entité
+        Parrain updatedParrain = parrainService.save(updatedParrainEntity);
+
+        // Retourner la réponse avec l'entité mise à jour
         return ResponseEntity.ok(updatedParrain);
+    }
+
+    @PostMapping(value = "/completercompteporteur", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Porteur> completercompteporteur(@RequestBody PorteurDto porteurDto) {
+
+        System.out.println("Données reçues : " + porteurDto);
+
+        Porteur porteurExistant = porteurService.findById(porteurDto.getIdUtilisateur());
+
+        // Vérifier si le porteur existe dans la base
+        if (porteurExistant == null) {
+            // Si le porteur n'existe pas, retourner un objet Porteur vide
+            Porteur emptyPorteur = new Porteur();
+            emptyPorteur.setIdUtilisateur(porteurDto.getIdUtilisateur());
+            System.out.println("Porteur introuvable, renvoi d'un objet vide.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyPorteur);
+        }
+
+        System.out.println("Compte complété");
+        System.out.println("id :" + porteurDto.getIdUtilisateur());
+
+        // Récupérer la liste des Accompagnements et Secteurs
+        List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll();
+        List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll();
+
+        // Mapper le DTO en entité, en incluant les accompagnements et secteurs
+        Porteur updatedPorteurEntity =  porteurMapper.toEntity(porteurDto, porteurExistant, accompagnements, secteursReseaux);
+        System.out.println("Entité mise à jour après le mapping : " + updatedPorteurEntity);
+        System.out.println("parrainDto dans Mapper le DTO en entité: " + porteurDto);
+        System.out.println("updatedParrainEntity via Mapper le DTO en entité: " + updatedPorteurEntity);
+
+        // Sauvegarder l'entité
+        Porteur updatedPorteur = porteurService.save(updatedPorteurEntity);
+
+        // Retourner la réponse avec l'entité mise à jour
+        return ResponseEntity.ok(updatedPorteur);
     }
 
     @PostMapping(value = "/accompagnementutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -153,9 +233,9 @@ public class UtilisateurController {
     }
 
     @PostMapping(value = "/filtres", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Utilisateur> selectionFiltres(@RequestBody UtilisateurDto utilisateurDto) {
+    public ResponseEntity<UtilisateurDto> selectionFiltres(@RequestBody UtilisateurDto utilisateurDto) {
         try {
-            Utilisateur savedUtilisateur = utilisateurService.selectionFiltres(utilisateurDto);
+            UtilisateurDto savedUtilisateur = utilisateurService.selectionFiltres(utilisateurDto);
             return ResponseEntity.ok(savedUtilisateur);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -165,8 +245,8 @@ public class UtilisateurController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Utilisateur> getUtilisateurById(@PathVariable Long id) {
-        Utilisateur utilisateur = utilisateurService.findById(id);
+    public ResponseEntity<UtilisateurDto> getUtilisateurById(@PathVariable Long id) {
+        UtilisateurDto utilisateur = utilisateurService.findById(id);
         return ResponseEntity.ok(utilisateur);
     }
 
