@@ -4,6 +4,7 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -67,15 +68,29 @@ public class SecteurReseauMapper {
         if (dto == null) {
             return null;
         }
+        // Version optimisée
+//        return new SecteurReseau(
+//                dto.getId(),
+//                dto.getLabel(),
+//                dto.getUtilisateurs() != null
+//                        ? dto.getUtilisateurs().stream()
+//                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto, null, null)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
+//                        .collect(Collectors.toList())
+//                        : null
+//        );
+
+        // Version détaillée
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        if (dto.getUtilisateurs() != null) {
+            for (UtilisateurDto utilisateurDto : dto.getUtilisateurs()) {
+                utilisateurs.add(utilisateurMapper.toEntity(utilisateurDto, null, null));
+            }
+        }
 
         return new SecteurReseau(
                 dto.getId(),
                 dto.getLabel(),
-                dto.getUtilisateurs() != null
-                        ? dto.getUtilisateurs().stream()
-                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto, null, null)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
-                        .collect(Collectors.toList())
-                        : null
+                utilisateurs
         );
     }
 }

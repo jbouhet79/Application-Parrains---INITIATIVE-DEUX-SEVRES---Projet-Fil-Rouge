@@ -3,8 +3,10 @@ package fr.initiativedeuxsevres.trouve_ton_match.mapper;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -64,15 +66,29 @@ public class TypeAccompagnementMapper {
         if (dto == null) {
             return null;
         }
+        // version optimisée
+//        return new TypeAccompagnement(
+//                dto.getId(),
+//                dto.getLabel(),
+//                dto.getUtilisateurs() != null
+//                        ? dto.getUtilisateurs().stream()
+//                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto, null, null)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
+//                        .collect(Collectors.toList())
+//                        : null
+//        );
+
+        // version détailléel
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        if (dto.getUtilisateurs() != null) {
+            for (UtilisateurDto utilisateurDto : dto.getUtilisateurs()) {
+                utilisateurs.add(utilisateurMapper.toEntity(utilisateurDto, null, null));
+            }
+        }
 
         return new TypeAccompagnement(
                 dto.getId(),
                 dto.getLabel(),
-                dto.getUtilisateurs() != null
-                        ? dto.getUtilisateurs().stream()
-                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto, null, null)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
-                        .collect(Collectors.toList())
-                        : null
+                utilisateurs
         );
     }
 }

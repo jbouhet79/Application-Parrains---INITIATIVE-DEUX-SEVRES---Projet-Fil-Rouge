@@ -20,6 +20,8 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -209,7 +211,7 @@ public class UtilisateurController {
     @PostMapping(value = "/accompagnementutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Utilisateur> accompagnementUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
         List<TypeAccompagnement> accompagnementTypeList = typeAccompagnementService
-                .findAllById(utilisateurDto.getAccompagnementTypeList());
+                .findAllById(utilisateurDto.getAccompagnementTypeList().stream().map(dto -> dto.getId()).collect(Collectors.toList()));
 
         Utilisateur utilisateur = utilisateurService.findByCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
         utilisateur.setAccompagnementTypeList(accompagnementTypeList);
@@ -222,7 +224,7 @@ public class UtilisateurController {
     @PostMapping(value = "/secteursreseauxutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Utilisateur> secteurReseauUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
         List<SecteurReseau> secteurReseauList = secteurReseauService
-                .findAllById(utilisateurDto.getSecteurReseauList());
+                .findAllById(utilisateurDto.getSecteurReseauList().stream().map(dto -> dto.getId()).collect(Collectors.toList()));
 
         Utilisateur utilisateur = utilisateurService.findByCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
         utilisateur.setSecteurReseauList(secteurReseauList);

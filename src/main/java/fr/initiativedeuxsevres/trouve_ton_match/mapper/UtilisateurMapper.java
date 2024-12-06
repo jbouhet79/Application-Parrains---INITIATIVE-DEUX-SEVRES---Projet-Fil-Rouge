@@ -12,13 +12,23 @@ import java.util.stream.Collectors;
 @Component
 public class UtilisateurMapper {
 
+    private final TypeAccompagnementMapper typeAccompagnementMapper;
+    private final SecteurReseauMapper secteurReseauMapper;
+
+    public UtilisateurMapper(TypeAccompagnementMapper typeAccompagnementMapper, SecteurReseauMapper secteurReseauMapper) {
+        this.typeAccompagnementMapper = typeAccompagnementMapper;
+        this.secteurReseauMapper = secteurReseauMapper;
+    }
+
+
+
     /**
      * Convertit une entité Utilisateur en UtilisateurDto.
      *
      * @param utilisateur L'entité Utilisateur à convertir.
      * @return Un UtilisateurDto correspondant.
      */
-    public static UtilisateurDto toDto(Utilisateur utilisateur) {
+    public  UtilisateurDto toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
@@ -35,18 +45,15 @@ public class UtilisateurMapper {
         // Convertir accompagnementTypeList en une liste d'IDs
         if (utilisateur.getAccompagnementTypeList() != null) {
             utilisateurDto.setAccompagnementTypeList(
-                    utilisateur.getAccompagnementTypeList().stream()
-                            .map(TypeAccompagnement::getId) // Récupérer l'ID de chaque TypeAccompagnement
-                            .collect(Collectors.toList())
+                    utilisateur.getAccompagnementTypeList().stream().map(acc -> typeAccompagnementMapper.toDto(acc)).collect(Collectors.toList())
             );
         }
 
         // Convertir secteurReseauList en une liste d'IDs
         if (utilisateur.getSecteurReseauList() != null) {
             utilisateurDto.setSecteurReseauList(
-                    utilisateur.getSecteurReseauList().stream()
-                            .map(SecteurReseau::getId) // Récupérer l'ID de chaque SecteurReseau
-                            .collect(Collectors.toList())
+                    utilisateur.getSecteurReseauList().stream().map(sect -> secteurReseauMapper.toDto(sect)).collect(Collectors.toList())
+
             );
         }
 
@@ -61,7 +68,7 @@ public class UtilisateurMapper {
      * @param secteursReseaux La liste des entités SecteurReseau correspondantes.
      * @return Une entité Utilisateur correspondant.
      */
-    public static Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
+    public  Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
                                        List<SecteurReseauDto> secteursReseaux) {
         if (utilisateurDto == null) {
             return null;

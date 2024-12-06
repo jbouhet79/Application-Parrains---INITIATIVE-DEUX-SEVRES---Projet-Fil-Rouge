@@ -70,6 +70,7 @@ const Filtres = () => {
       .then(response => response.json())
       .then(data => {
         setTypesAccompagnement(data);
+        console.log('listeAccompagnement:', data);
       })
       .catch(error => {
         console.error('Erreur lors de la récupération des secteurs:', error);
