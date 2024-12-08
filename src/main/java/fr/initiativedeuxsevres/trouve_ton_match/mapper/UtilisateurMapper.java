@@ -14,13 +14,10 @@ public class UtilisateurMapper {
 
     private final TypeAccompagnementMapper typeAccompagnementMapper;
     private final SecteurReseauMapper secteurReseauMapper;
-
     public UtilisateurMapper(TypeAccompagnementMapper typeAccompagnementMapper, SecteurReseauMapper secteurReseauMapper) {
         this.typeAccompagnementMapper = typeAccompagnementMapper;
         this.secteurReseauMapper = secteurReseauMapper;
     }
-
-
 
     /**
      * Convertit une entité Utilisateur en UtilisateurDto.
@@ -28,7 +25,7 @@ public class UtilisateurMapper {
      * @param utilisateur L'entité Utilisateur à convertir.
      * @return Un UtilisateurDto correspondant.
      */
-    public  UtilisateurDto toDto(Utilisateur utilisateur) {
+    public UtilisateurDto toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
@@ -46,6 +43,7 @@ public class UtilisateurMapper {
         if (utilisateur.getAccompagnementTypeList() != null) {
             utilisateurDto.setAccompagnementTypeList(
                     utilisateur.getAccompagnementTypeList().stream().map(acc -> typeAccompagnementMapper.toDto(acc)).collect(Collectors.toList())
+
             );
         }
 
@@ -53,7 +51,6 @@ public class UtilisateurMapper {
         if (utilisateur.getSecteurReseauList() != null) {
             utilisateurDto.setSecteurReseauList(
                     utilisateur.getSecteurReseauList().stream().map(sect -> secteurReseauMapper.toDto(sect)).collect(Collectors.toList())
-
             );
         }
 
@@ -68,7 +65,7 @@ public class UtilisateurMapper {
      * @param secteursReseaux La liste des entités SecteurReseau correspondantes.
      * @return Une entité Utilisateur correspondant.
      */
-    public  Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
+    public static Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
                                        List<SecteurReseauDto> secteursReseaux) {
         if (utilisateurDto == null) {
             return null;
