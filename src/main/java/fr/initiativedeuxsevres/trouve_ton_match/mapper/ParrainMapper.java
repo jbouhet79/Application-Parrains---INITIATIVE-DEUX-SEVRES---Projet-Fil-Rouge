@@ -4,6 +4,7 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.ParrainDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class ParrainMapper {
     private final UtilisateurMapper utilisateurMapper;
 
     // Injection du mapper Utilisateur si nécessaire
-    public ParrainMapper(UtilisateurMapper utilisateurMapper) {
+    public ParrainMapper(@Lazy UtilisateurMapper utilisateurMapper) {
         this.utilisateurMapper = utilisateurMapper;
     }
 

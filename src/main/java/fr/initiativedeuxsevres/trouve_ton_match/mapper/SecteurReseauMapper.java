@@ -4,6 +4,7 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class SecteurReseauMapper {
     private final UtilisateurMapper utilisateurMapper;
 
     // Injection du mapper des utilisateurs
-    public SecteurReseauMapper(UtilisateurMapper utilisateurMapper) {
+    public SecteurReseauMapper(@Lazy UtilisateurMapper utilisateurMapper) {
         this.utilisateurMapper = utilisateurMapper;
     }
 

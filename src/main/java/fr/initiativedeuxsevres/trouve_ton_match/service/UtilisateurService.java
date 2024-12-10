@@ -67,20 +67,6 @@ public class UtilisateurService {
         return null;
     }
 
-//    public Utilisateur findByCodeUtilisateur(String codeUtilisateur) {
-//        Parrain parrain = parrainRepository.findByCodeUtilisateur(codeUtilisateur);
-//        if (parrain != null) {
-//            return  new ParrainDto(parrain);
-//        }
-//
-//        Porteur porteur = porteurRepository.findByCodeUtilisateur(codeUtilisateur);
-//        if (porteur != null) {
-//            return new PorteurDto(porteur);
-//        }
-//
-//        return null;
-//    }
-
     // Méthode qui renvoie un utilisateur qui peut être un parrain ou un porteur
     public Optional<Utilisateur> getByNomPrenomCode(String nom, String prenom, String code) {
         // Essayez de trouver l'utilisateur dans le repository parrain

@@ -6,6 +6,7 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
 import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class PorteurMapper {
     private final UtilisateurMapper utilisateurMapper;
 
     // Injection du mapper Utilisateur
-    public PorteurMapper(UtilisateurMapper utilisateurMapper) {
+    public PorteurMapper(@Lazy UtilisateurMapper utilisateurMapper) {
         this.utilisateurMapper = utilisateurMapper;
     }
 

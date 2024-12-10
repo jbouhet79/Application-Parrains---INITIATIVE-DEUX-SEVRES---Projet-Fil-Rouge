@@ -27,7 +27,7 @@ public class ParrainService {
 
     private final TypeAccompagnementService typeAccompagnementService;
     private final SecteurReseauService secteurReseauService;
-    private final ParrainService parrainService;
+//    private final ParrainService parrainService;
 
     private final ParrainMapper parrainMapper;
 
@@ -114,7 +114,7 @@ public class ParrainService {
 
     public Parrain save(ParrainDto parrainDto) {
 
-        Parrain parrainExistant = parrainService.findById(parrainDto.getIdUtilisateur());
+        Parrain parrainExistant = findById(parrainDto.getIdUtilisateur());
         System.out.println("Récupérer le parrain existant par son ID dans /completercompteparrain : " + parrainDto);
         System.out.println("Récupérer le NOM du parrain existant par son ID dans /completercompteparrain : " + parrainDto.getNomUtilisateur());
 

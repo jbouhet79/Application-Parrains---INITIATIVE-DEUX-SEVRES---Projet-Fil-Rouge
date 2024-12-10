@@ -4,6 +4,8 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,9 +14,10 @@ import java.util.stream.Collectors;
 @Component
 public class UtilisateurMapper {
 
+
     private final TypeAccompagnementMapper typeAccompagnementMapper;
     private final SecteurReseauMapper secteurReseauMapper;
-    public UtilisateurMapper(TypeAccompagnementMapper typeAccompagnementMapper, SecteurReseauMapper secteurReseauMapper) {
+    public UtilisateurMapper(@Lazy TypeAccompagnementMapper typeAccompagnementMapper,@Lazy SecteurReseauMapper secteurReseauMapper) {
         this.typeAccompagnementMapper = typeAccompagnementMapper;
         this.secteurReseauMapper = secteurReseauMapper;
     }

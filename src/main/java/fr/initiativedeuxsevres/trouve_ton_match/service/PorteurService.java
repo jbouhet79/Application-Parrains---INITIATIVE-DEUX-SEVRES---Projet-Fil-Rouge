@@ -21,7 +21,6 @@ public class PorteurService {
 
     private final TypeAccompagnementService typeAccompagnementService;
     private final SecteurReseauService secteurReseauService;
-    private final PorteurService porteurService;
 
     private final PorteurMapper porteurMapper;
 
@@ -147,7 +146,7 @@ public class PorteurService {
 
     public Porteur save(PorteurDto porteurDto) {
 
-        Porteur porteurExistant = porteurService.findById(porteurDto.getIdUtilisateur());
+        Porteur porteurExistant = findById(porteurDto.getIdUtilisateur());
         System.out.println("Récupérer le porteur existant par son ID dans /completercompteporteur : " + porteurDto);
         System.out.println("Récupérer le NOM du porteur existant par son ID dans /completercompteporteur : "
                 + porteurDto.getNomUtilisateur());
