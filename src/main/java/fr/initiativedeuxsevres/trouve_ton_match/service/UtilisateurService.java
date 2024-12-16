@@ -143,14 +143,20 @@ public class UtilisateurService {
 //        return save(utilisateur);
 //    }
 
+    @Transactional
     public UtilisateurDto selectionFiltres(UtilisateurDto utilisateurDto) {
         // Avec les mappers
         // Mapper le DTO en entité pour l'opération métier
         // Utilisateur utilisateur = utilisateurMapper.toEntity(utilisateurDto, null, null);
 
+        System.out.println("selectionFiltres - UtilisateurDto du front: " + utilisateurDto);
+        System.out.println("Secteurs reçus : " + utilisateurDto.getSecteurReseauList());
+        System.out.println("Accompagnements reçus : " + utilisateurDto.getAccompagnementTypeList());
+
 
         // 1. Récupérer l'utilisateur par son ID
         Utilisateur utilisateur = utilisateurMapper.toEntity(findById(utilisateurDto.getIdUtilisateur()), null, null);
+        System.out.println("selectionFiltres - Utilisateur récupéré: " + utilisateur);
         if (utilisateur == null) {
             throw new EntityNotFoundException("Utilisateur non trouvé"); // Ou une autre exception personnalisée
         }
@@ -161,6 +167,7 @@ public class UtilisateurService {
         }
 
         // 3. Récupérer dans des listes (accompagnements et secteurs), les types d'accompagnement et secteurs par leurs IDs
+        List<SecteurReseau> secteurs = utilisateurDto.getSecteurReseauList().stream().map(dto -> secteurReseauRepository.findById(dto.getId())).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
         List<TypeAccompagnement> accompagnements = utilisateurDto
                 .getAccompagnementTypeList()
                 .stream()
@@ -168,7 +175,24 @@ public class UtilisateurService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-        List<SecteurReseau> secteurs = utilisateurDto.getSecteurReseauList().stream().map(dto -> secteurReseauRepository.findById(dto.getId())).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+// version détaillé
+//        // Initialisation de la liste des accompagnements
+//        List<TypeAccompagnement> accompagnements = new ArrayList<>();
+//
+//        // Récupération de la liste des DTOs
+//        List<AccompagnementTypeDto> dtoList = utilisateurDto.getAccompagnementTypeList();
+//
+//        // Parcours de chaque DTO dans la liste
+//        for (AccompagnementTypeDto dto : dtoList) {
+//            // Recherche du TypeAccompagnement par ID
+//            Optional<TypeAccompagnement> optionalAccompagnement = typeAccompagnementRepository.findById(dto.getId());
+//
+//            // Vérification si le TypeAccompagnement est présent
+//            if (optionalAccompagnement.isPresent()) {
+//                // Ajout du TypeAccompagnement à la liste des accompagnements
+//                accompagnements.add(optionalAccompagnement.get());
+//            }
+//        }
 
         // Convertir les entités en DTOs
 //        List<TypeAccompagnementDto> accompagnementDtos = accompagnements.stream()
@@ -200,6 +224,13 @@ public class UtilisateurService {
 //            }
             utilisateur.setSecteurReseauList(secteurs);
 //        }
+
+        // **4. Mise à jour des relations de l'utilisateur**
+//        utilisateur.getSecteurReseauList().clear();
+//        utilisateur.getSecteurReseauList().addAll(secteurs);
+//
+//        utilisateur.getAccompagnementTypeList().clear();
+//        utilisateur.getAccompagnementTypeList().addAll(accompagnements);
 
         // 5. Sauvegarder les modifications de l'utilisateur
         Utilisateur updatedUtilisateur = save(utilisateur);

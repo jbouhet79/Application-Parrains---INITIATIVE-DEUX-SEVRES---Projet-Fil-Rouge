@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Component
 public class UtilisateurMapper {
 
-
-    private final TypeAccompagnementMapper typeAccompagnementMapper;
     private final SecteurReseauMapper secteurReseauMapper;
-    public UtilisateurMapper(@Lazy TypeAccompagnementMapper typeAccompagnementMapper,@Lazy SecteurReseauMapper secteurReseauMapper) {
-        this.typeAccompagnementMapper = typeAccompagnementMapper;
+    private final TypeAccompagnementMapper typeAccompagnementMapper;
+
+    public UtilisateurMapper(@Lazy SecteurReseauMapper secteurReseauMapper, @Lazy TypeAccompagnementMapper typeAccompagnementMapper) {
         this.secteurReseauMapper = secteurReseauMapper;
+        this.typeAccompagnementMapper = typeAccompagnementMapper;
     }
 
     /**
@@ -42,14 +42,6 @@ public class UtilisateurMapper {
         utilisateurDto.setCodeUtilisateur(utilisateur.getCodeUtilisateur());
         utilisateurDto.setTypeUtilisateur(utilisateur.getTypeUtilisateur());
 
-        // Convertir accompagnementTypeList en une liste d'IDs
-        if (utilisateur.getAccompagnementTypeList() != null) {
-            utilisateurDto.setAccompagnementTypeList(
-                    utilisateur.getAccompagnementTypeList().stream().map(acc -> typeAccompagnementMapper.toDto(acc)).collect(Collectors.toList())
-
-            );
-        }
-
         // Convertir secteurReseauList en une liste d'IDs
         if (utilisateur.getSecteurReseauList() != null) {
             utilisateurDto.setSecteurReseauList(
@@ -57,6 +49,13 @@ public class UtilisateurMapper {
             );
         }
 
+        // Convertir accompagnementTypeList en une liste d'IDs
+        if (utilisateur.getAccompagnementTypeList() != null) {
+            utilisateurDto.setAccompagnementTypeList(
+                    utilisateur.getAccompagnementTypeList().stream().map(acc -> typeAccompagnementMapper.toDto(acc)).collect(Collectors.toList())
+
+            );
+        }
         return utilisateurDto;
     }
 

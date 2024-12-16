@@ -1,5 +1,5 @@
 import Wrapper from '../../Wrapper/index'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 import { ChampSaisie } from '../CreationCompte/champSaisie';
 import './monCompteParrain.css';
@@ -9,13 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 
 
-
 const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{1,}$/; // minimum 2 caractères pour les autres champs
 // const nomRegex = /^[A-ZÀ-ÿ\- ]{2,}$/; // NOM en MAJUSCULES
 // const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const MonCompteParrain = () => {
-
+  
+  const presentationParcoursRef = useRef(null);
   // Initialisation des états des valeurs de utilisateurDto
   // const [utilisateurDto, setUtilisateurDto] = useState({
   //   idUtilisateur: '',
@@ -55,6 +55,12 @@ const MonCompteParrain = () => {
     });
 
     setIsSubmitted(false);
+
+    // Focaliser sur le champ "presentationParcours"
+    if (presentationParcoursRef.current) {
+      presentationParcoursRef.current.focus();
+    }
+
   }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
 
   const [errors, setErrors] = useState({});
@@ -161,6 +167,7 @@ const MonCompteParrain = () => {
 
         {errors.presentationParcours && <div className="error">{errors.presentationParcours}</div>}
         <ChampSaisie
+          ref={presentationParcoursRef}
           setValue={(value) => handleChange('presentationParcours', value)}
           label="Rapide présentation du parcours :"
           name="presentationParcours"

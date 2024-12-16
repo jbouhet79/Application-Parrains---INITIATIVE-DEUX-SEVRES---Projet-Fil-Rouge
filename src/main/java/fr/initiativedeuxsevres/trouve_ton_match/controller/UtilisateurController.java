@@ -108,6 +108,7 @@ public class UtilisateurController {
 
     @PostMapping(value = "/filtres", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UtilisateurDto> selectionFiltres(@RequestBody UtilisateurDto utilisateurDto) {
+        System.out.println("Données reçues du frontend : " + utilisateurDto);
         try {
             UtilisateurDto savedUtilisateur = utilisateurService.selectionFiltres(utilisateurDto);
             return ResponseEntity.ok(savedUtilisateur);

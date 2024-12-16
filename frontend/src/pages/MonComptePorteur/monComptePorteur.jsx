@@ -1,5 +1,5 @@
 import Wrapper from '../../Wrapper/index'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 import { ChampSaisie } from '../CreationCompte/champSaisie';
 import './monComptePorteur.css';
@@ -15,6 +15,7 @@ const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{1,}$/; // minimum 2 caractères pour les a
 // const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const MonComptePorteur = () => {
+  const dateLancementRef = useRef(null);
 
   // Initialisation des états des valeurs de utilisateurDto
   // const [utilisateurDto, setUtilisateurDto] = useState({
@@ -57,6 +58,12 @@ const MonComptePorteur = () => {
     });
 
     setIsSubmitted(false);
+
+    // Focaliser sur le champ "dateLancement"
+    if (dateLancementRef.current) {
+      dateLancementRef.current.focus();
+    }
+
   }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
 
   const [errors, setErrors] = useState({});
@@ -164,6 +171,7 @@ const MonComptePorteur = () => {
 
         {errors.dateLancement && <div className="error">{errors.dateLancement}</div>}
         <ChampSaisie
+          ref={dateLancementRef}
           setValue={(value) => handleChange('dateLancement', value)}
           label="Date de lancement (reprise de l’activité) :"
           name="dateLancement"

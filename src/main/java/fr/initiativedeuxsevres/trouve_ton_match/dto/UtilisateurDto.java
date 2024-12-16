@@ -27,7 +27,6 @@ public class UtilisateurDto {
 //    protected TypeUtilisateur type;  // Enum pour type d'utilisateur
 //    protected List<Long> accompagnementTypeList;
 //    protected List<Long> secteurReseauList;
-    protected List<TypeAccompagnementDto> accompagnementTypeList;  // Liste de DTO pour les types d'accompagnement
     protected List<SecteurReseauDto> secteurReseauList;  // Liste de DTO pour les secteurs de réseau
-
+    protected List<TypeAccompagnementDto> accompagnementTypeList;  // Liste de DTO pour les types d'accompagnement
 }
