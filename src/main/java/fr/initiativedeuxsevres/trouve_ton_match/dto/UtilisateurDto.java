@@ -1,17 +1,23 @@
 package fr.initiativedeuxsevres.trouve_ton_match.dto;
 
-import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
-import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME, // Utilise un champ "type" pour identifier la sous-classe
+        include = JsonTypeInfo.As.PROPERTY, // Le champ "type" est une propriété dans le JSON
+        property = "typeUtilisateur" // Le nom du champ discriminant dans le JSON
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ParrainDto.class, name = "parrain"),
+        @JsonSubTypes.Type(value = PorteurDto.class, name = "porteur")
+})
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UtilisateurDto {
+public abstract class UtilisateurDto {
 
     /**
      * Propriétés protected pour que les classes héritants de UtilisateurDto
@@ -23,11 +29,10 @@ public class UtilisateurDto {
     protected String entrepriseUtilisateur;
     protected String plateformeUtilisateur;
     protected String codeUtilisateur;
-    protected String typeUtilisateur; // TODO a vérifier l'utilité.
-//    protected TypeUtilisateur type;  // Enum pour type d'utilisateur
-    protected List<Long> accompagnementTypeList;
-    protected List<Long> secteurReseauList;
-//    private List<TypeAccompagnementDto> accompagnementTypeList;  // Liste de DTO pour les types d'accompagnement
-//    private List<SecteurReseauDto> secteurReseauList;  // Liste de DTO pour les secteurs de réseau
+
+    protected String typeUtilisateur;
+    protected List<SecteurReseauDto> secteurReseauList;  // Liste de DTO pour les secteurs de réseau
+    protected List<TypeAccompagnementDto> accompagnementTypeList;  // Liste de DTO pour les types d'accompagnement
+
 
 }

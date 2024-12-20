@@ -24,22 +24,21 @@
 }
 
 .custom-container .custom-input {
-    background-color: rgb(255, 255, 255, 0.4);
+    background-color: rgb(255, 255, 255, 0.8);
     color: black ;
     border: none ;
 }
 
-.custom-container .custom-id {
-    background-color: rgb(255, 255, 255, 0.4);
+/* .custom-container .custom-id {
+    background-color: rgb(255, 255, 255, 1);
     color: black ;
     border: none ;
 
-}
+} */
 
 .text {
     color: white;
-    /* font-size: x-large; */
-    font-weight: 500;
+    font-size: xx-large;
     background-color: #FF165D;
     padding: 5px 40px 10px 40px;
     border-radius: 10px;

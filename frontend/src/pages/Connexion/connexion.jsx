@@ -1,25 +1,48 @@
 import Wrapper from '../../Wrapper/index'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChampSaisie } from '../CreationCompte/champSaisie';
 import '../CreationCompte/creationCompte.css';
 import './connexion.css';
 import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 
 
-const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/; // minimum 2 caractères pour les autres champs
+const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{1,}$/; // minimum 2 caractères pour les autres champs
 const nomRegex = /^[A-ZÀ-ÿ\- ]{2,}$/; // NOM en MAJUSCULES
 const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const Connexion = () => {
+
+    const nomUtilisateurRef = useRef(null);
 
     const [utilisateurDto, setUtilisateurDto] = useState({
         // idUtilisateur:'',
         nomUtilisateur: '',
         prenomUtilisateur: '',
         codeUtilisateur: '',
+        typeUtilisateur: ''
     });
+
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const location = useLocation(); // Ce hook permet d’accéder à l’objet location qui représente l’URL actuelle de l’application 
+
+    const idUtilisateur = localStorage.getItem('idUtilisateur');
+    console.log('recupération de idUtilisateur:', idUtilisateur);
+    const typeUtilisateur = localStorage.getItem('typeUtilisateur');
+    console.log('recupération de typeUtilisateur:', typeUtilisateur);
+
+    // Réinitialisation des états des valeurs de parrainDto
+    // lorsque le composant est monté (c’est-à-dire lorsque la page est chargée ou actualisée).
+    useEffect(() => {
+        setUtilisateurDto({
+        // idUtilisateur: idUtilisateur,
+        typeUtilisateur: typeUtilisateur
+        });
+        // setIsSubmitted(false);
+    }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
+
 
     const [errors, setErrors] = useState({});
     const [userNotFound, setUserNotFound] = useState(false);
@@ -54,18 +77,6 @@ const Connexion = () => {
         setUserNotFound(false);
     };
 
-    // const sauvegarderIdUtilisateur = (idUtilisateur, value) => {
-
-    //     setUtilisateurDto({
-    //         ...utilisateurDto,
-    //         [idUtilisateur]: value
-    //     // const [idUtilisateur, setIdUtilisateur] = useState(0);
-    //     // setIdUtilisateur(data.idUtilisateur);
-    //     // useEffect(() => {
-    //     //     console.log('idUtilisateur changed!')
-    //     // }, [idUtilisateur]);
-    // });
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -88,13 +99,16 @@ const Connexion = () => {
         .then(data => {
             if (data.idUtilisateur) {
                 console.log('Utilisateur trouvé, id:', data.idUtilisateur);
+                console.log('Utilisateur trouvé, type:', data.typeUtilisateur);
                 console.log('Utilisateur trouvé, data:', data);
 
                 localStorage.setItem('idUtilisateur', data.idUtilisateur);
+                localStorage.setItem('typeUtilisateur', data.typeUtilisateur);
 
                 // Mettez à jour l'état ici après avoir reçu la réponse
                 setUtilisateurDto({
                     idUtilisateur: data.idUtilisateur, // Assurez-vous que l'ID est récupéré correctement
+                    typeUtilisateur: data.typeUtilisateur
                     // presentationParcours: data.presentationParcours || '',
                     // branchesReseau: data.branchesReseau || '',
                     // domainesExpertise: data.domainesExpertise || '',
@@ -130,20 +144,22 @@ const Connexion = () => {
             </div>
             <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
 
+
                 {errors.prenomUtilisateur && <div className="error">{errors.nomUtilisateur}</div>}
                 <ChampSaisie
+                    ref={nomUtilisateurRef}
                     setValue={(value) => handleChange('nomUtilisateur', value)}
                     label="Nom :"
                     name="nomUtilisateur"
                     value={utilisateurDto.nomUtilisateur}
-                    regex={nomRegex}
+                    regex={otherRegex}
                 />
 
                 {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
                 <ChampSaisie setValue={(value) => handleChange('prenomUtilisateur', value)} label="Prenom :" name="prenomUtilisateur" value={utilisateurDto.prenomUtilisateur} regex={otherRegex} ></ChampSaisie>
 
                 {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
-                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={codeRegex}  ></ChampSaisie>
+                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={otherRegex}  ></ChampSaisie>
 
                 <Container fluid>
                     <div className="position-bouton d-flex align-items-center justify-content-end">
