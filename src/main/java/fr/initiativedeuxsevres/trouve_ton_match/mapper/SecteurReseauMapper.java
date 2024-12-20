@@ -4,22 +4,18 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class SecteurReseauMapper {
 
-    private final UtilisateurMapper utilisateurMapper;
+    private final UtilisateurMapper utilisateurMapper = new UtilisateurMapper();
 
-    // Injection du mapper des utilisateurs
-    public SecteurReseauMapper(@Lazy UtilisateurMapper utilisateurMapper) {
-        this.utilisateurMapper = utilisateurMapper;
-    }
 
     /**
      * Convertit une entité SecteursReseaux en DTO SecteurReseauDto.
@@ -45,11 +41,11 @@ public class SecteurReseauMapper {
 
         // Version détaillée
         List<UtilisateurDto> utilisateursDto = new ArrayList<>();
-        if (entity.getUtilisateurs() != null) {
+        /*if (entity.getUtilisateurs() != null) {
             for (Utilisateur utilisateur : entity.getUtilisateurs()) {
                 utilisateursDto.add(utilisateurMapper.toDto(utilisateur));
             }
-        }
+        }*/
 
         return new SecteurReseauDto(
                 entity.getId(),
@@ -72,12 +68,22 @@ public class SecteurReseauMapper {
         return new SecteurReseau(
                 dto.getId(),
                 dto.getLabel(),
-                dto.getUtilisateurs() != null
+                null
+                /*dto.getUtilisateurs() != null
                         ? dto.getUtilisateurs().stream()
-                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto, null, null)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
+                        .map(utilisateurDto -> utilisateurMapper.toEntity(utilisateurDto)) // Utilisation du mapper pour les utilisateurs avec les listes nulles
                         .collect(Collectors.toList())
-                        : null
+                        : null*/
         );
+    }
+
+    public List<SecteurReseau> toEntityList(List<SecteurReseauDto> secteurReseauDtos) {
+        if (secteurReseauDtos == null) {
+            return Collections.emptyList();
+        }
+        return secteurReseauDtos.stream()
+                .map(dto -> this.toEntity(dto)) // Méthode existante qui convertit un SecteurReseauDto en SecteurReseau
+                .collect(Collectors.toList());
     }
 }
 

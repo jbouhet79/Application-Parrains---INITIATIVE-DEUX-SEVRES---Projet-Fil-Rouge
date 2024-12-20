@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 //  Indique que les méthodes equals et hashCode ne doivent pas inclure les champs de la superclasse (qui peut poser problème en cas d'héritage de classe).
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+
 public class PorteurDto extends UtilisateurDto {
 
     /**
@@ -22,6 +22,12 @@ public class PorteurDto extends UtilisateurDto {
     private String besoins;
     private String lieuActivite;
     private String disponibilites;
+
+    // permet de préciser le type de l'utilisateur perdu avec l'utilisation de Jackson dans UtilisateurDto
+    public PorteurDto()
+    {
+        this.typeUtilisateur = "porteur";
+    }
 
     /**
      * Constructeur d'un porteur (compte utilisateur + paramètres propres au porteur)

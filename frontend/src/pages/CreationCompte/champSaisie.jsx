@@ -4,21 +4,15 @@ import './creationCompte.css';
 export const ChampSaisie = forwardRef(({setValue, label, name, value, regex}, ref) => {
 
     const [errMsg, setErrMsg] = useState([{}]);
-
     const [validInput, setValidInput] = useState(false);
     const [focusInput, setFocusInput] = useState(false);
 
 
-    // const inputRef = useRef();
     useEffect(() => {
         if (ref && ref.current) {
           ref.current.focus();
         }
       }, [ref]);
-
-    // useEffect(() => {
-    //     inputRef.current.focus()
-    // }, [])
 
      useEffect(() => {
            const result = regex.test(value);

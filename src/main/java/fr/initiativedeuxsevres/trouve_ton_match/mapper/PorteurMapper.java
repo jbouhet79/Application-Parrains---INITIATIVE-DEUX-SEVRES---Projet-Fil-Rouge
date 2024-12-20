@@ -1,25 +1,13 @@
 package fr.initiativedeuxsevres.trouve_ton_match.mapper;
 
 import fr.initiativedeuxsevres.trouve_ton_match.dto.PorteurDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 
-import java.util.List;
 
-@Component
-public class PorteurMapper {
+public class PorteurMapper extends UtilisateurMapper {
 
-    private final UtilisateurMapper utilisateurMapper;
-
-    // Injection du mapper Utilisateur
-    public PorteurMapper(@Lazy UtilisateurMapper utilisateurMapper) {
-        this.utilisateurMapper = utilisateurMapper;
-    }
 
     /**
      * Convertit une entité Porteur en DTO PorteurDto.
@@ -27,26 +15,32 @@ public class PorteurMapper {
      * @param entity L'entité Porteur à convertir.
      * @return Le DTO PorteurDto.
      */
-    public PorteurDto toDto(Porteur entity) {
+    private PorteurDto toPorteurDto(Porteur entity) {
         if (entity == null) {
             return null;
         }
 
         // Conversion de l'entité Porteur en DTO PorteurDto
-        PorteurDto dto = new PorteurDto();
-        dto.setIdUtilisateur(entity.getIdUtilisateur());
-        dto.setNomUtilisateur(entity.getNomUtilisateur());
-        dto.setPrenomUtilisateur(entity.getPrenomUtilisateur());
-        dto.setEntrepriseUtilisateur(entity.getEntrepriseUtilisateur());
-        dto.setPlateformeUtilisateur(entity.getPlateformeUtilisateur());
-        dto.setCodeUtilisateur(entity.getCodeUtilisateur());
+        PorteurDto dto = (PorteurDto) super.toDto(entity);
+
         dto.setDateLancement(entity.getDateLancement());
         dto.setDomaine(entity.getDomaine());
+        dto.setDescriptifActivite(entity.getDescriptifActivite());
         dto.setBesoins(entity.getBesoins());
         dto.setLieuActivite(entity.getLieuActivite());
         dto.setDisponibilites(entity.getDisponibilites());
 
         return dto;
+    }
+
+    @Override
+    public UtilisateurDto toDto(Utilisateur entity) {
+        return this.toPorteurDto((Porteur) entity);
+    }
+
+
+    public Utilisateur toEntity(UtilisateurDto porteurDto) {
+        return this.toPorteurEntity((PorteurDto) porteurDto);
     }
 
     /**
@@ -55,16 +49,14 @@ public class PorteurMapper {
      * @param porteurDto Le DTO PorteurDto à convertir.
      * @return L'entité Porteur.
      */
-    public Porteur toEntity(PorteurDto porteurDto, Porteur porteurExistant, List<TypeAccompagnementDto> accompagnements, List<SecteurReseauDto> secteursReseaux) {
+    private Porteur toPorteurEntity(PorteurDto porteurDto) {
         if (porteurDto == null) {
             return null;
         }
 
-        // Convertir le DTO en entité
-        Porteur porteur = porteurExistant != null ? porteurExistant : new Porteur();
-
-        // Mapper les propriétés héritées de la classe Utilisateur
-        // pas nécessaire : cause d'erreur
+        // on doit caster l'utilisateur en Porteur car on ne peut pas déduire l'enfant depuis le parent
+        // On n'a pas besoin de caster le porteurDto en utilisateurDto car on connait toujours le parent d'un enfant.
+        Porteur porteur = (Porteur) super.toEntity(porteurDto);
 
         // Mapper les propriétés spécifiques à Parrain
         porteur.setDateLancement(porteurDto.getDateLancement());

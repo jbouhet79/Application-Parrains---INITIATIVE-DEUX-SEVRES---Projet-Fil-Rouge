@@ -5,16 +5,11 @@ import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
 import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 import fr.initiativedeuxsevres.trouve_ton_match.mapper.ParrainMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.TypeAccompagnementMapper;
 import fr.initiativedeuxsevres.trouve_ton_match.repository.ParrainRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,49 +22,12 @@ public class ParrainService {
 
     private final TypeAccompagnementService typeAccompagnementService;
     private final SecteurReseauService secteurReseauService;
-//    private final ParrainService parrainService;
-
-    private final ParrainMapper parrainMapper;
 
     @Autowired
     private ParrainRepository parrainRepository;
 
-//    @Autowired
-//    private ParrainMapper parrainMapper;
-
-    // Avant le Mapper
-//    public Parrain createParrain (UtilisateurDto newParrainDto) {
-//
-//        // On transforme un Dto en entité
-//        Parrain nouveauParrainEntity = Parrain.builder()
-//                .nomUtilisateur(newParrainDto.getNomUtilisateur())
-//                .prenomUtilisateur(newParrainDto.getPrenomUtilisateur())
-//                .entrepriseUtilisateur(newParrainDto.getEntrepriseUtilisateur())
-//                .plateformeUtilisateur(newParrainDto.getPlateformeUtilisateur())
-//                .codeUtilisateur(newParrainDto.getCodeUtilisateur())
-//                .build();
-//
-//        return parrainRepository.save(nouveauParrainEntity);
-//    }
-
     public Parrain createParrain(UtilisateurDto newParrainDto) {
-//        public Parrain createParrain(UtilisateurDto utilisateurDto) {
         System.out.println("Type d'utilisateur dans ParrainService: " + newParrainDto.getTypeUtilisateur());
-        // Convertir un UtilisateurDto en ParrainDto
-//        ParrainDto parrainDto = new ParrainDto();
-//        parrainDto.setIdUtilisateur(utilisateurDto.getIdUtilisateur());
-//        parrainDto.setNomUtilisateur(utilisateurDto.getNomUtilisateur());
-//        parrainDto.setPrenomUtilisateur(utilisateurDto.getPrenomUtilisateur());
-//        parrainDto.setEntrepriseUtilisateur(utilisateurDto.getEntrepriseUtilisateur());
-//        parrainDto.setPlateformeUtilisateur(utilisateurDto.getPlateformeUtilisateur());
-//        parrainDto.setCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
-//        parrainDto.setTypeUtilisateur(utilisateurDto.getTypeUtilisateur());
-//
-//        // Convertir le DTO en entité
-//        Parrain nouveauParrainEntity = parrainMapper.toEntity(parrainDto);
-
-//        // Sauvegarder l'entité dans la base de données
-//        return parrainRepository.save(nouveauParrainEntity);
 
         // On transforme un Dto en entité
         Parrain nouveauParrainEntity = Parrain.builder()
@@ -129,7 +87,7 @@ public class ParrainService {
 
         List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll();
         List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll();
-        Parrain updatedParrainEntity =  parrainMapper.toEntity(parrainDto, parrainExistant, accompagnements, secteursReseaux);
+        Parrain updatedParrainEntity = (Parrain) new ParrainMapper().toEntity(parrainDto);
         System.out.println("Sauvegarde en cours pour : " + updatedParrainEntity);
         System.out.println("Sauvegarde en cours (nom) : " + updatedParrainEntity.getNomUtilisateur());
         return parrainRepository.save(updatedParrainEntity);

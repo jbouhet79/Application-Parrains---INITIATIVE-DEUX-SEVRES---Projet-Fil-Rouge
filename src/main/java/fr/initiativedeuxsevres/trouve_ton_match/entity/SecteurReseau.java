@@ -1,6 +1,9 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +18,7 @@ import java.util.List;
 @Builder
 @Table
 public class SecteurReseau {
+
 
     @Id
     private Long id;

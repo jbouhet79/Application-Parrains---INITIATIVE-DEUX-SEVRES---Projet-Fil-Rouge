@@ -6,14 +6,13 @@ import './creationCompte.css';
 import Container from 'react-bootstrap/esm/Container';
 import send from '../../media/images/logos/send_blanc.png';
 
-const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{2,}$/; // minimum 2 caractères pour les autres champs
+const otherRegex = /^[a-zA-ZÀ-ÿ\- ]{1,}$/; // minimum 2 caractères pour les autres champs
 const nomRegex = /^[A-ZÀ-ÿ\- ]{2,}$/; // NOM en MAJUSCULES
 const codeRegex = /^[a-zA-ZÀ-ÿ\- ]{1}\d{3}$/; // code admis :  1 lettre suivie de 3 chiffres
 
 const CreationCompte = () => {
 
     const nomUtilisateurRef = useRef(null);
-
 
     // Initialisation des états des valeurs de utilisateurDto
     const [utilisateurDto, setUtilisateurDto] = useState({
@@ -139,7 +138,7 @@ const CreationCompte = () => {
     return (
         <Wrapper>
             <div className='titre'>
-                <h1 className='text'>creation compte</h1>
+                <h1 className='text'>Creation compte</h1>
             </div>
             <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
 
@@ -150,7 +149,7 @@ const CreationCompte = () => {
                     label="Nom :"
                     name="nomUtilisateur"
                     value={utilisateurDto.nomUtilisateur}
-                    regex={nomRegex}
+                    regex={otherRegex}
                 />
 
                 {errors.prenomUtilisateur && <div className="error">{errors.prenomUtilisateur}</div>}
@@ -163,7 +162,7 @@ const CreationCompte = () => {
                 <ChampSaisie setValue={(value) => handleChange('plateformeUtilisateur', value)} value={utilisateurDto.plateformeUtilisateur} label="Plateforme Initiative :" name="plateformeUtilisateur" regex={otherRegex}  ></ChampSaisie>
 
                 {errors.codeUtilisateur && <div className="error">{errors.codeUtilisateur}</div>}
-                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={codeRegex}  ></ChampSaisie>
+                <ChampSaisie setValue={(value) => handleChange('codeUtilisateur', value)} label="Code d'accès :" value={utilisateurDto.codeUtilisateur} name="codeUtilisateur" regex={otherRegex}  ></ChampSaisie>
 
                 {errors.type && <div className="error">{errors.type}</div>}
                 <div class="form-label-type">

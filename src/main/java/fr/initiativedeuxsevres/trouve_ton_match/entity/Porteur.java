@@ -1,19 +1,20 @@
 package fr.initiativedeuxsevres.trouve_ton_match.entity;
 
-//import fr.initiativedeuxsevres.trouve_ton_match.enums.TypeUtilisateur;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-//@NoArgsConstructor
 @SuperBuilder
-@Table(name= "porteur")
-public class Porteur extends Utilisateur  {
+@Table(name = "porteur")
+public class Porteur extends Utilisateur {
 
     private String dateLancement;
     private String domaine;
@@ -22,15 +23,13 @@ public class Porteur extends Utilisateur  {
     private String lieuActivite;
     private String disponibilites;
 
-//    @Builder.Default
-//    private String type = Porteur.class.getSimpleName();
-//    private TypeUtilisateur type;
-
-    public Porteur(){
+    public Porteur() {
         super();
     }
+
     /**
      * Constructeur avec tous les paramètres de la classe mère
+     *
      * @param idUtilisateur
      * @param nomUtilisateur
      * @param prenomUtilisateur

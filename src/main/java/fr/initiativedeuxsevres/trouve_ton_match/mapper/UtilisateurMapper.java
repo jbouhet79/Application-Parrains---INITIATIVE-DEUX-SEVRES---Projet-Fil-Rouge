@@ -1,26 +1,59 @@
 package fr.initiativedeuxsevres.trouve_ton_match.mapper;
 
-import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.*;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Porteur;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
+
 public class UtilisateurMapper {
 
-    private final SecteurReseauMapper secteurReseauMapper;
-    private final TypeAccompagnementMapper typeAccompagnementMapper;
 
-    public UtilisateurMapper(@Lazy SecteurReseauMapper secteurReseauMapper, @Lazy TypeAccompagnementMapper typeAccompagnementMapper) {
-        this.secteurReseauMapper = secteurReseauMapper;
-        this.typeAccompagnementMapper = typeAccompagnementMapper;
+    public UtilisateurMapper() {
+        // Initialisation si nécessaire
     }
+
+
+    public static UtilisateurDto toUtilisateurDto(Utilisateur utilisateur) {
+        if (utilisateur == null) {
+            return null;
+        }
+
+        UtilisateurDto utilisateurDto;
+
+        if (utilisateur instanceof Parrain) {
+            utilisateurDto = new ParrainMapper().toDto(utilisateur);
+        } else if (utilisateur instanceof Porteur) {
+            utilisateurDto = new PorteurMapper().toDto(utilisateur);
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        return utilisateurDto;
+    }
+
+
+    public static Utilisateur toUtilisateurEntity(UtilisateurDto utilisateurDto) {
+        if (utilisateurDto == null) {
+            return null;
+        }
+
+        Utilisateur utilisateurEntity;
+
+        if (utilisateurDto instanceof ParrainDto || utilisateurDto.getTypeUtilisateur().equals("parrain")) {
+            utilisateurEntity = new ParrainMapper().toEntity(utilisateurDto);
+        } else if (utilisateurDto instanceof PorteurDto || utilisateurDto.getTypeUtilisateur().equals("porteur")) {
+            utilisateurEntity = new PorteurMapper().toEntity(utilisateurDto);
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        return utilisateurEntity;
+    }
+
 
     /**
      * Convertit une entité Utilisateur en UtilisateurDto.
@@ -28,12 +61,22 @@ public class UtilisateurMapper {
      * @param utilisateur L'entité Utilisateur à convertir.
      * @return Un UtilisateurDto correspondant.
      */
-    public UtilisateurDto toDto(Utilisateur utilisateur) {
+    protected UtilisateurDto toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
 
-        UtilisateurDto utilisateurDto = new UtilisateurDto();
+        UtilisateurDto utilisateurDto;
+
+        // utilisation de instanceof afin de s'assurer du bon type d'utilisateurDto
+        if (utilisateur instanceof Parrain) {
+            utilisateurDto = new ParrainDto();
+        } else if (utilisateur instanceof Porteur) {
+            utilisateurDto = new PorteurDto();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
         utilisateurDto.setIdUtilisateur(utilisateur.getIdUtilisateur());
         utilisateurDto.setNomUtilisateur(utilisateur.getNomUtilisateur());
         utilisateurDto.setPrenomUtilisateur(utilisateur.getPrenomUtilisateur());
@@ -42,20 +85,19 @@ public class UtilisateurMapper {
         utilisateurDto.setCodeUtilisateur(utilisateur.getCodeUtilisateur());
         utilisateurDto.setTypeUtilisateur(utilisateur.getTypeUtilisateur());
 
-        // Convertir secteurReseauList en une liste d'IDs
-        if (utilisateur.getSecteurReseauList() != null) {
-            utilisateurDto.setSecteurReseauList(
-                    utilisateur.getSecteurReseauList().stream().map(sect -> secteurReseauMapper.toDto(sect)).collect(Collectors.toList())
-            );
+
+        // Associer les entités accompagnementTypeList
+        List<TypeAccompagnement> listAccom = utilisateur.getAccompagnementTypeList();
+        if (listAccom != null && !listAccom.isEmpty()) {
+            utilisateurDto.setAccompagnementTypeList(new TypeAccompagnementMapper().toDtoList(listAccom));
         }
 
-        // Convertir accompagnementTypeList en une liste d'IDs
-        if (utilisateur.getAccompagnementTypeList() != null) {
-            utilisateurDto.setAccompagnementTypeList(
-                    utilisateur.getAccompagnementTypeList().stream().map(acc -> typeAccompagnementMapper.toDto(acc)).collect(Collectors.toList())
 
-            );
+        List<SecteurReseauDto> listSectDto = utilisateurDto.getSecteurReseauList();
+        if (listSectDto != null && !listSectDto.isEmpty()) {
+            utilisateur.setSecteurReseauList(new SecteurReseauMapper().toEntityList(listSectDto));
         }
+
         return utilisateurDto;
     }
 
@@ -63,26 +105,25 @@ public class UtilisateurMapper {
      * Convertit un UtilisateurDto en entité Utilisateur.
      *
      * @param utilisateurDto Le DTO à convertir.
-     * @param accompagnements La liste des entités TypeAccompagnement correspondantes.
-     * @param secteursReseaux La liste des entités SecteurReseau correspondantes.
      * @return Une entité Utilisateur correspondant.
      */
-    public static Utilisateur toEntity(UtilisateurDto utilisateurDto, List<TypeAccompagnementDto> accompagnements,
-                                       List<SecteurReseauDto> secteursReseaux) {
+
+    protected Utilisateur toEntity(UtilisateurDto utilisateurDto) {
+        System.out.println("utilisateurMapper toEntity ================================================ ");
         if (utilisateurDto == null) {
             return null;
         }
 
-        // Utilisation d'un constructeur
-//        Utilisateur utilisateur = new Utilisateur() {
-//            // Classe anonyme car Utilisateur est abstrait
-//        };
-
         Utilisateur utilisateur;
-        if (utilisateurDto.getTypeUtilisateur().equals("parrain")) {
-            utilisateur = new Parrain(); // Créer une instance de Parrain
+
+        // utilisation de instanceof afin de s'assurer du bon type d'utilisateurDto
+        if (utilisateurDto instanceof ParrainDto || utilisateurDto.getTypeUtilisateur().equals("parrain")) {
+            utilisateur = new Parrain();
+
+        } else if (utilisateurDto instanceof PorteurDto || utilisateurDto.getTypeUtilisateur().equals("porteur")) {
+            utilisateur = new Porteur();
         } else {
-            utilisateur = new Porteur(); // Créer une instance de Porteur
+            throw new IllegalArgumentException();
         }
 
         // Mapping des champs
@@ -93,17 +134,20 @@ public class UtilisateurMapper {
         utilisateur.setPlateformeUtilisateur(utilisateurDto.getPlateformeUtilisateur());
         utilisateur.setCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
         utilisateur.setTypeUtilisateur(utilisateurDto.getTypeUtilisateur());
-        System.out.println("utilisateurMapper: " + utilisateur);
+
 
         // Associer les entités accompagnementTypeList
-//        if (accompagnements != null) {
-//            utilisateur.setAccompagnementTypeList(accompagnements);
-//        }
+        List<TypeAccompagnementDto> listAccomDto = utilisateurDto.getAccompagnementTypeList();
 
-        // Associer les entités secteurReseauList
-//        if (secteursReseaux != null) {
-//            utilisateur.setSecteurReseauList(secteursReseaux); // setSecteurReseauList(List<SecteurReseauDto> secteurReseauList)
-//        }
+        if (listAccomDto != null && !listAccomDto.isEmpty()) {
+            utilisateur.setAccompagnementTypeList(new TypeAccompagnementMapper().toEntityList(listAccomDto));
+        }
+
+
+        List<SecteurReseauDto> listSectDto = utilisateurDto.getSecteurReseauList();
+        if (listSectDto != null && !listSectDto.isEmpty()) {
+            utilisateur.setSecteurReseauList(new SecteurReseauMapper().toEntityList(listSectDto));
+        }
 
         return utilisateur;
     }

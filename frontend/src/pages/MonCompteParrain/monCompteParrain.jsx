@@ -33,6 +33,7 @@ const MonCompteParrain = () => {
     domainesExpertise: '',
     secteurGeographique: '',
     disponibilites: '',
+    typeUtilisateur: ''
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -41,6 +42,8 @@ const MonCompteParrain = () => {
 
   const idUtilisateur = localStorage.getItem('idUtilisateur');
   console.log('recupération de idUtilisateur:', idUtilisateur);
+  const typeUtilisateur = localStorage.getItem('typeUtilisateur');
+  console.log('recupération de typeUtilisateur:', typeUtilisateur);
 
   // Réinitialisation des états des valeurs de parrainDto
   // lorsque le composant est monté (c’est-à-dire lorsque la page est chargée ou actualisée).
@@ -52,6 +55,7 @@ const MonCompteParrain = () => {
       domainesExpertise: '',
       secteurGeographique: '',
       disponibilites: '',
+      typeUtilisateur: typeUtilisateur
     });
 
     setIsSubmitted(false);
@@ -161,7 +165,7 @@ const MonCompteParrain = () => {
   return (
     <Wrapper>
       <div className='titre'>
-        <h1 className='text'>compte Parrain</h1>
+        <h1 className='text'>Compte Parrain</h1>
       </div>
       <form onSubmit={handleSubmit} className='col-6 mx-auto my-3'>
 

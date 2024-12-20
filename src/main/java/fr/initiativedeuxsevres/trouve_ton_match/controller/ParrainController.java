@@ -22,7 +22,10 @@ public class ParrainController {
     @PostMapping(value = "/completercompteparrain", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Parrain> completercompteparrain(@RequestBody ParrainDto parrainDto) {
         // Sauvegarder l'entité
-        Parrain updatedParrain = parrainService.save(parrainDto);
+       // Parrain updatedParrain = parrainService.save(parrainDto);
+
+
+        Parrain updatedParrain = parrainService.completerCompteParrain(parrainDto.getIdUtilisateur(), parrainDto.getPresentationParcours(), parrainDto.getBranchesReseau(), parrainDto.getDomainesExpertise(), parrainDto.getSecteurGeographique(), parrainDto.getDisponibilites());
 
         // Retourner la réponse avec l'entité mise à jour
         return ResponseEntity.ok(updatedParrain);

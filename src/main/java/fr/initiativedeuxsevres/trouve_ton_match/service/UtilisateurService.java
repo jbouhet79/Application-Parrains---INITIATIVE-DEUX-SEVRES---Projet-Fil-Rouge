@@ -1,19 +1,19 @@
 package fr.initiativedeuxsevres.trouve_ton_match.service;
 
-import fr.initiativedeuxsevres.trouve_ton_match.dto.*;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.SecteurReseauMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.TypeAccompagnementMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.ParrainDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.PorteurDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.*;
+import fr.initiativedeuxsevres.trouve_ton_match.mapper.ParrainMapper;
+import fr.initiativedeuxsevres.trouve_ton_match.mapper.PorteurMapper;
+import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
 import fr.initiativedeuxsevres.trouve_ton_match.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,17 +21,10 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor // Cette annotation génère automatiquement un constructeur pour tous les champs
-                         // final ou marqués comme @NonNull
+// final ou marqués comme @NonNull
+@Slf4j
 public class UtilisateurService {
 
-    private final ParrainService parrainService;
-    private final PorteurService porteurService;
-    private final SecteurReseauService secteurReseauService;
-    private final TypeAccompagnementService typeAccompagnementService;
-
-    private final UtilisateurMapper utilisateurMapper;
-    private final TypeAccompagnementMapper typeAccompagnementMapper;
-    private final SecteurReseauMapper secteurReseauMapper;
 
     private final ParrainRepository parrainRepository;
     private final PorteurRepository porteurRepository;
@@ -46,7 +39,7 @@ public class UtilisateurService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("Utilisateur avec ID " + idUtilisateur + " non trouvé."));
 
-        return utilisateurMapper.toDto(entity);
+        return UtilisateurMapper.toUtilisateurDto(entity);
     }
 
     // La méthode findByCodeUtilisateur recherche d’abord un Parrain par
@@ -56,7 +49,7 @@ public class UtilisateurService {
     public Utilisateur findByCodeUtilisateur(String codeUtilisateur) {
         Parrain parrain = parrainRepository.findByCodeUtilisateur(codeUtilisateur);
         if (parrain != null) {
-            return  parrain;
+            return parrain;
         }
 
         Porteur porteur = porteurRepository.findByCodeUtilisateur(codeUtilisateur);
@@ -99,74 +92,49 @@ public class UtilisateurService {
 
     public Utilisateur save(UtilisateurDto utilisateurDto) {
 
-        // avant le Mapper
-//        System.out.println("Type d'utilisateur: " + utilisateurDto.getTypeUtilisateur());
-//         if(utilisateurDto.getTypeUtilisateur().equals("parrain")) {
-////        if (utilisateurDto.getType() != null && utilisateurDto.getType().name().toLowerCase().equals("parrain")) {
-//            return parrainService.createParrain(utilisateurDto);
-//        } else {
-//            return porteurService.createPorteur(utilisateurDto);
-//        }
-
-         // avec le Mapper
+        // avec le Mapper
         System.out.println("Type d'utilisateur dans le service: " + utilisateurDto.getTypeUtilisateur());
 
-        // Mapper pour convertir le DTO en entité
-        List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll(); // Récupérer ou créer la liste
-        List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll(); // Récupérer ou créer la liste
-        Utilisateur utilisateur = utilisateurMapper.toEntity(utilisateurDto, accompagnements, secteursReseaux);
-
         // Sauvegarder l'utilisateur
-        if (utilisateur instanceof Parrain) {
-            return parrainRepository.save((Parrain) utilisateur);
+        if (utilisateurDto instanceof ParrainDto || utilisateurDto.getTypeUtilisateur().equals("parrain")) {
+            Parrain parrain = (Parrain) UtilisateurMapper.toUtilisateurEntity(utilisateurDto);
+            return parrainRepository.save(parrain);
         } else {
-            return porteurRepository.save((Porteur) utilisateur);
+            Porteur porteur = (Porteur) UtilisateurMapper.toUtilisateurEntity(utilisateurDto);
+            return porteurRepository.save(porteur);
         }
     }
 
-//    public Utilisateur mettreAJourFiltres(UtilisateurDto utilisateurDto) {
-//        Utilisateur utilisateur = findByCodeUtilisateur(utilisateurDto.getCodeUtilisateur());
-//
-//        // Mettre à jour les accompagnements
-//        if (utilisateurDto.getAccompagnementTypeList() != null) {
-//            List<TypeAccompagnement> accompagnements = typeAccompagnementService
-//                    .findAllById(utilisateurDto.getAccompagnementTypeList());
-//            utilisateur.setAccompagnementTypeList(accompagnements);
-//        }
-//
-//        // Mettre à jour les secteurs/réseaux
-//        if (utilisateurDto.getSecteurReseauList() != null) {
-//            List<SecteurReseau> secteurs = secteurReseauService.findAllById(utilisateurDto.getSecteurReseauList());
-//            utilisateur.setSecteurReseauList(secteurs);
-//        }
-//
-//        return save(utilisateur);
-//    }
 
-    @Transactional
     public UtilisateurDto selectionFiltres(UtilisateurDto utilisateurDto) {
-        // Avec les mappers
-        // Mapper le DTO en entité pour l'opération métier
-        // Utilisateur utilisateur = utilisateurMapper.toEntity(utilisateurDto, null, null);
 
         System.out.println("selectionFiltres - UtilisateurDto du front: " + utilisateurDto);
         System.out.println("Secteurs reçus : " + utilisateurDto.getSecteurReseauList());
         System.out.println("Accompagnements reçus : " + utilisateurDto.getAccompagnementTypeList());
-
+        System.out.println("id ******************************* : " + utilisateurDto.getIdUtilisateur());
 
         // 1. Récupérer l'utilisateur par son ID
-        Utilisateur utilisateur = utilisateurMapper.toEntity(findById(utilisateurDto.getIdUtilisateur()), null, null);
-        System.out.println("selectionFiltres - Utilisateur récupéré: " + utilisateur);
+        UtilisateurDto utilisateurDtoFromBdd = findById(utilisateurDto.getIdUtilisateur());
+
+
+        // 2. Mettre à jour les autres listes
+        utilisateurDtoFromBdd.setSecteurReseauList(utilisateurDto.getSecteurReseauList());
+        utilisateurDtoFromBdd.setAccompagnementTypeList(utilisateurDto.getAccompagnementTypeList());
+
+        // 3. Mapper le DTO mis à jour en entité
+        Utilisateur utilisateur = UtilisateurMapper.toUtilisateurEntity(utilisateurDtoFromBdd);
+
+        System.out.println("selectionFiltres - Utilisateur récupéré: zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" + utilisateur);
         if (utilisateur == null) {
             throw new EntityNotFoundException("Utilisateur non trouvé"); // Ou une autre exception personnalisée
         }
 
-        // 2. Vérification des listes d'IDs
+        // 4. Vérification des listes d'IDs
         if (utilisateurDto.getAccompagnementTypeList() == null || utilisateurDto.getSecteurReseauList() == null) {
             throw new IllegalArgumentException("Les listes d'IDs ne peuvent pas être nulles");
         }
 
-        // 3. Récupérer dans des listes (accompagnements et secteurs), les types d'accompagnement et secteurs par leurs IDs
+        // 5. Récupérer dans des listes (accompagnements et secteurs), les types d'accompagnement et secteurs par leurs IDs
         List<SecteurReseau> secteurs = utilisateurDto.getSecteurReseauList().stream().map(dto -> secteurReseauRepository.findById(dto.getId())).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
         List<TypeAccompagnement> accompagnements = utilisateurDto
                 .getAccompagnementTypeList()
@@ -175,6 +143,7 @@ public class UtilisateurService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+
 // version détaillé
 //        // Initialisation de la liste des accompagnements
 //        List<TypeAccompagnement> accompagnements = new ArrayList<>();
@@ -213,7 +182,7 @@ public class UtilisateurService {
 //                }
 //
 //            }
-            utilisateur.setAccompagnementTypeList(accompagnements); // mise à jour de la propriété AccompagnementTypeList de utilisateur avec la liste des accompagnements récupérés
+        utilisateur.setAccompagnementTypeList(accompagnements); // mise à jour de la propriété AccompagnementTypeList de utilisateur avec la liste des accompagnements récupérés
 //        }
 
 //        if (secteurs != null && !secteurs.isEmpty()) {
@@ -222,7 +191,7 @@ public class UtilisateurService {
 //            {
 //                idSecteurs.add(sect.getId());
 //            }
-            utilisateur.setSecteurReseauList(secteurs);
+        utilisateur.setSecteurReseauList(secteurs);
 //        }
 
         // **4. Mise à jour des relations de l'utilisateur**
@@ -234,9 +203,16 @@ public class UtilisateurService {
 
         // 5. Sauvegarder les modifications de l'utilisateur
         Utilisateur updatedUtilisateur = save(utilisateur);
+        log.warn("selectionFiltres - Utilisateur récupéré: " + updatedUtilisateur);
+        System.out.println("selectionFiltres - updatedUtilisateur: " + updatedUtilisateur);
 
         // 6. Convertir l'entité sauvegardée en DTO
-        UtilisateurDto updatedUtilisateurDto = utilisateurMapper.toDto(updatedUtilisateur);
+
+        UtilisateurDto updatedUtilisateurDto = UtilisateurMapper.toUtilisateurDto(updatedUtilisateur);
+
+
+        log.warn("selectionFiltres - Utilisateur récupéré: " + updatedUtilisateurDto);
+        System.out.println("selectionFiltres - updatedUtilisateurDto: " + updatedUtilisateurDto);
 
         return updatedUtilisateurDto;
 

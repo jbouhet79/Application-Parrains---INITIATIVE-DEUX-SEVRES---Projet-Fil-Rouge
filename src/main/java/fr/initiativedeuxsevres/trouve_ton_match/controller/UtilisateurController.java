@@ -1,14 +1,13 @@
 package fr.initiativedeuxsevres.trouve_ton_match.controller;
 
-import fr.initiativedeuxsevres.trouve_ton_match.dto.*;
-import fr.initiativedeuxsevres.trouve_ton_match.entity.*;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.UtilisateurMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.ParrainMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.mapper.PorteurMapper;
-import fr.initiativedeuxsevres.trouve_ton_match.service.ParrainService;
-import fr.initiativedeuxsevres.trouve_ton_match.service.PorteurService;
-import fr.initiativedeuxsevres.trouve_ton_match.service.TypeAccompagnementService;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.SecteurReseau;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.TypeAccompagnement;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 import fr.initiativedeuxsevres.trouve_ton_match.service.SecteurReseauService;
+import fr.initiativedeuxsevres.trouve_ton_match.service.TypeAccompagnementService;
 import fr.initiativedeuxsevres.trouve_ton_match.service.UtilisateurService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collector;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,22 +26,22 @@ import java.util.stream.Collectors;
 @RequestMapping("/creationCompte")
 public class UtilisateurController {
 
-    private final UtilisateurService utilisateurService;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
+    @Autowired
     private final TypeAccompagnementService typeAccompagnementService;
 
+    @Autowired
     private final SecteurReseauService secteurReseauService;
 
     @PostMapping(value = "/createutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
-        // sans Mapper
-//        Utilisateur utilisateur = utilisateurService.save(utilisateurDto);
 
         // avec Mapper
-//        List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll(); // Récupérer ou créer la liste
-//        List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll(); // Récupérer ou créer la liste
+        List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll(); // Récupérer ou créer la liste
+        List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll(); // Récupérer ou créer la liste
 
-//        Utilisateur utilisateur = utilisateurMapper.toEntity(utilisateurDto, accompagnements, secteursReseaux);
         Utilisateur utilisateur = utilisateurService.save(utilisateurDto);
         System.out.println("utilisateur dans le controlleur: " + utilisateur);
 
@@ -69,6 +67,7 @@ public class UtilisateurController {
     // La réponse sera au format JSON
     @PostMapping(value = "/checkutilisateur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Utilisateur> checkUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
+
         Optional<Utilisateur> utilisateur = utilisateurService.getByNomPrenomCode(
                 utilisateurDto.getNomUtilisateur(),
                 utilisateurDto.getPrenomUtilisateur(),
@@ -108,7 +107,7 @@ public class UtilisateurController {
 
     @PostMapping(value = "/filtres", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UtilisateurDto> selectionFiltres(@RequestBody UtilisateurDto utilisateurDto) {
-        System.out.println("Données reçues du frontend : " + utilisateurDto);
+        System.out.println("Données reçues du frontend ****************************************************** : " + utilisateurDto);
         try {
             UtilisateurDto savedUtilisateur = utilisateurService.selectionFiltres(utilisateurDto);
             return ResponseEntity.ok(savedUtilisateur);

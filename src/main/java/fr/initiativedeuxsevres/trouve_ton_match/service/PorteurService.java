@@ -22,50 +22,8 @@ public class PorteurService {
     private final TypeAccompagnementService typeAccompagnementService;
     private final SecteurReseauService secteurReseauService;
 
-    private final PorteurMapper porteurMapper;
-
     @Autowired
     private PorteurRepository porteurRepository;
-
-    // 1ère version identique au PorteurService
-
-    // public PorteurDto createPorteur (PorteurDto newPorteurDto) {
-    //
-    // // On transforme un Dto en entité
-    // Porteur nouveauPorteurEntity = new Porteur(
-    // null,
-    // newPorteurDto.getNomUtilisateur(),
-    // newPorteurDto.getPrenomUtilisateur(),
-    // newPorteurDto.getEntrepriseUtilisateur(),
-    // newPorteurDto.getPlateformeUtilisateur(),
-    // newPorteurDto.getCodeUtilisateur(),
-    // newPorteurDto.getDateLancement(),
-    // newPorteurDto.getDomaine(),
-    // newPorteurDto.getBesoins(),
-    // newPorteurDto.getLieuActivite(),
-    // newPorteurDto.getDisponibilites()
-    // );
-    //
-    // Porteur saved = porteurRepository.save(nouveauPorteurEntity);
-    //
-    // // On transforme l'entité sauvée en un nouveau Dto pour le renvoyer au front
-    // (via le controlleur)
-    // return new PorteurDto(
-    // saved.getIdUtilisateur(),
-    // saved.getNomUtilisateur(),
-    // saved.getPrenomUtilisateur(),
-    // saved.getEntrepriseUtilisateur(),
-    // saved.getPlateformeUtilisateur(),
-    // saved.getCodeUtilisateur(),
-    // saved.getDateLancement(),
-    // saved.getDomaine(),
-    // saved.getBesoins(),
-    // saved.getLieuActivite(),
-    // saved.getDisponibilites()
-    // );
-    // }
-
-    // ou seconde version :
 
     public Porteur createPorteur(UtilisateurDto newPorteurDto) {
 
@@ -162,8 +120,7 @@ public class PorteurService {
 
         List<TypeAccompagnementDto> accompagnements = typeAccompagnementService.findAll();
         List<SecteurReseauDto> secteursReseaux = secteurReseauService.findAll();
-        Porteur updatedPorteurEntity = porteurMapper.toEntity(porteurDto, porteurExistant, accompagnements,
-                secteursReseaux);
+        Porteur updatedPorteurEntity = (Porteur) new PorteurMapper().toEntity(porteurDto);
         System.out.println("Sauvegarde en cours pour : " + updatedPorteurEntity);
         System.out.println("Sauvegarde en cours (nom) : " + updatedPorteurEntity.getNomUtilisateur());
         return porteurRepository.save(updatedPorteurEntity);

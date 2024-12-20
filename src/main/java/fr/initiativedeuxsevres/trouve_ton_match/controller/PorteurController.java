@@ -24,7 +24,9 @@ public class PorteurController {
     @PostMapping(value = "/completercompteporteur", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Porteur> completercompteporteur(@RequestBody PorteurDto porteurDto) {
         // Sauvegarder l'entité
-        Porteur updatedPorteur = porteurService.save(porteurDto);
+        // Porteur updatedPorteur = porteurService.save(porteurDto);
+
+        Porteur updatedPorteur = porteurService.completerComptePorteur(porteurDto.getIdUtilisateur(), porteurDto.getDateLancement(), porteurDto.getDomaine(), porteurDto.getDescriptifActivite(), porteurDto.getBesoins(), porteurDto.getLieuActivite(), porteurDto.getDisponibilites());
 
         // Retourner la réponse avec l'entité mise à jour
         return ResponseEntity.ok(updatedPorteur);

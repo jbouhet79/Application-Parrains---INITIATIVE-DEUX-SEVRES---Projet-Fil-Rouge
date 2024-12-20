@@ -10,5 +10,9 @@ spring:
         show-sql: true
         hibernate:
             ddl-auto: create
+debug: true
+logging:
+    level:
+        org.springframework: DEBUG
 
 

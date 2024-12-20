@@ -18,7 +18,14 @@ const Filtres = () => {
     idUtilisateur: '',
     secteurReseauList: [],
     accompagnementTypeList: [],
+    typeUtilisateur: ''
   });
+
+  const location = useLocation(); // Ce hook permet d’accéder à l’objet location qui représente l’URL actuelle de l’application 
+  const idUtilisateur = localStorage.getItem('idUtilisateur');
+  const typeUtilisateur = localStorage.getItem('typeUtilisateur');
+  console.log('recupération de idUtilisateur - page - filtres :', idUtilisateur);
+  console.log('recupération de typeUtilisateur - page - filtres :', typeUtilisateur);
 
   
   const [secteurs, setSecteurs] = useState([]); // Liste des secteurs récupérés de la BDD
@@ -26,10 +33,17 @@ const Filtres = () => {
   const [typesAccompagnement, setTypesAccompagnement] = useState([]); // Liste des types d'accompagnement récupérés
   const [accompagnements, setAccompagnements] = useState([]); // Liste des types sélectionnés
   const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  // // Réinitialisation des états des valeurs de utilisateurDto
+  // // lorsque le composant est monté (c’est-à-dire lorsque la page est chargée ou actualisée).
+  // useEffect(() => {
+  //   setUtilisateurDto({
+  //     idUtilisateur: idUtilisateur,
+  //     typeUtilisateur: typeUtilisateur
+  //   });
 
-  const location = useLocation(); // Ce hook permet d’accéder à l’objet location qui représente l’URL actuelle de l’application 
-  const idUtilisateur = localStorage.getItem('idUtilisateur');
-  console.log('recupération de idUtilisateur - page - filtres :', idUtilisateur);
+  //   setIsSubmitted(false);
+  // }, [location]); // A chaque fois que l’URL change (info connue grâce à l'objet location), le useEffect est déclenché pour réinitialiser la page.
 
   // Avant recupération des secteurs en bbd - suppression de l'initialisation de l'objet
   // const [secteurReseau, setSecteurReseau] = useState({
@@ -81,9 +95,10 @@ const Filtres = () => {
     setUtilisateurDto({
       idUtilisateur: idUtilisateur,
       secteurReseauList: [],
-      accompagnementTypeList: []
+      accompagnementTypeList: [],
+      typeUtilisateur: typeUtilisateur
     })
-  }, [location, idUtilisateur]);
+  }, [location, idUtilisateur, typeUtilisateur]);
 
   // const handleChange = (event) => {
 
@@ -139,118 +154,6 @@ const Filtres = () => {
   };
 
 
-  // const handleChange = (event, item, isSecteur) => {
-  //   const { checked } = event.target;
-  
-  //   if (isSecteur) {
-  //     // Gestion des secteurs
-  //     setSecteurReseau((prevState) => {
-  //       const updatedSecteurs = checked
-  //         ? [...prevState, { id: item.id, label: item.label }]
-  //         : prevState.filter((secteur) => secteur.id !== item.id);
-  
-  //       // Mettez à jour utilisateurDto avec les secteurs modifiés
-  //       setUtilisateurDto((prevDto) => ({
-  //         ...prevDto,
-  //         secteurReseauList: updatedSecteurs,
-  //       }));
-  
-  //       return updatedSecteurs;
-  //     });
-  //   } else {
-  //     // Gestion des types d'accompagnement
-  //     setAccompagnements((prevState) => {
-  //       const updatedAccompagnements = checked
-  //         ? [...prevState, { id: item.id, label: item.label }]
-  //         : prevState.filter((type) => type.id !== item.id);
-  
-  //       // Mettez à jour utilisateurDto avec les types d'accompagnement modifiés
-  //       setUtilisateurDto((prevDto) => ({
-  //         ...prevDto,
-  //         accompagnementTypeList: updatedAccompagnements,
-  //       }));
-  
-  //       return updatedAccompagnements;
-  //     });
-  //   }
-  // };
-  
-
-    // Si nécessaire, mettez à jour utilisateurDto =============================== Retiré dans la nouvelle version
-    // setUtilisateurDto((prevState) => ({
-    //   ...prevState,
-    //   secteurReseauList: checked
-    //     ? [...prevState.secteurReseauList, { id: secteur.id, label: secteur.label }]
-    //     : prevState.secteurReseauList.filter((item) => item.id !== secteur.id),
-    //   accompagnementTypeList: checked
-    //     ? [...prevState.accompagnementTypeList, { id: accompagnements.id, label: accompagnements.label }]
-    //     : prevState.accompagnementTypeList.filter((item) => item.id !== accompagnements.id),
-    // }));
-    // console.log("setUtilisateurDto:", utilisateurDto)
-
-    // ================== fin version modifiée =========================
-
-
-
-  //   console.log("utilisateurDto :", utilisateurDto);
-  // }
-
-
-  // ancienne version ==========================================================
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   console.log("Formulaire soumis"); // Formulaire soumis
-
-  //   // Convertir les objets en tableaux de valeurs cochées
-  //   const secteurReseauList = Object.keys(secteurReseau)
-  //     .filter(option => secteurReseau[option])
-  //     .map(option => parseInt(option.replace('secteur', ''))); // Convertir en numéros d'ID;
-
-
-  //   const accompagnementTypeList = Object.keys(accompagnements)
-  //     .filter(option => accompagnements[option])
-  //     .map(option => parseInt(option.replace('typeAccompagnement', ''))); // Convertir en numéros d'ID;
-
-
-  //   // Mettre à jour utilisateurDto avec les valeurs sélectionnées
-  //   setUtilisateurDto((prevUtilisateurDto) => {
-  //     const utilisateurDto = {
-  //       ...prevUtilisateurDto, // Utiliser l'état précédent pour garantir que l'on travaille avec la version la plus récente
-  //       secteurReseauList,
-  //       accompagnementTypeList,
-  //     };
-
-  //     console.log("UtilisateurDto à envoyer :", utilisateurDto);
-
-  //     fetch('http://localhost:8080/creationCompte/filtres', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(utilisateurDto)
-  //     })
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error('La réponse du réseau n\'était pas correcte');
-  //         }
-  //         return response.json();
-  //       })
-  //       .then(data => {
-  //         console.log("Données reçues :", data);
-  //         setIsSubmitted(true); // Indiquer que le formulaire a été soumis avec succès
-
-  //         console.log("Secteurs/Réseaux sélectionnés :", secteurReseauList.join(', '))
-  //         console.log("Types accompagnements sélectionnés :", accompagnementTypeList.join(', '))
-  //       })
-  //       .catch(error => {
-  //         console.error('Il y a eu un problème avec l\'opération fetch :', error);
-  //       });
-
-  //     return utilisateurDto;
-  //   });
-  // }
-
   // Soumission du formulaire
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -259,6 +162,7 @@ const Filtres = () => {
       idUtilisateur: idUtilisateur,
       secteurReseauList: secteurReseau,
       accompagnementTypeList: accompagnements,
+      typeUtilisateur: typeUtilisateur
     };
 
     console.log('Payload envoyé:', utilisateurDtoToSend);

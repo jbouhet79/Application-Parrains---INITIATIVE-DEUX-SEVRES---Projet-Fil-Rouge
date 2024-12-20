@@ -1,72 +1,61 @@
 package fr.initiativedeuxsevres.trouve_ton_match.mapper;
 
 import fr.initiativedeuxsevres.trouve_ton_match.dto.ParrainDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.SecteurReseauDto;
-import fr.initiativedeuxsevres.trouve_ton_match.dto.TypeAccompagnementDto;
+import fr.initiativedeuxsevres.trouve_ton_match.dto.UtilisateurDto;
 import fr.initiativedeuxsevres.trouve_ton_match.entity.Parrain;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import fr.initiativedeuxsevres.trouve_ton_match.entity.Utilisateur;
 
-import java.util.List;
 
-@Component
-public class ParrainMapper {
+public class ParrainMapper extends UtilisateurMapper {
 
-    private final UtilisateurMapper utilisateurMapper;
-
-    // Injection du mapper Utilisateur si nécessaire
-    public ParrainMapper(@Lazy UtilisateurMapper utilisateurMapper) {
-        this.utilisateurMapper = utilisateurMapper;
-    }
 
     /**
      * Convertit une entité Parrain en un DTO ParrainDto.
-     * @param parrain L'entité Parrain à convertir.
+     *
+     * @param entity L'entité Parrain à convertir.
      * @return Un DTO ParrainDto.
      */
-    public static ParrainDto toDto(Parrain parrain) {
-        if (parrain == null) {
+    private ParrainDto toParrainDto(Parrain entity) {
+        if (entity == null) {
             return null;
         }
 
         // Convertir l'entité en DTO
-        ParrainDto parrainDto = new ParrainDto();
-
-        // Mapper les propriétés héritées de la classe Utilisateur
-        parrainDto.setIdUtilisateur(parrain.getIdUtilisateur());
-        parrainDto.setNomUtilisateur(parrain.getNomUtilisateur());
-        parrainDto.setPrenomUtilisateur(parrain.getPrenomUtilisateur());
-        parrainDto.setEntrepriseUtilisateur(parrain.getEntrepriseUtilisateur());
-        parrainDto.setPlateformeUtilisateur(parrain.getPlateformeUtilisateur());
-        parrainDto.setCodeUtilisateur(parrain.getCodeUtilisateur());
-        System.out.println("Passage dans ParrainMapper toDto - nom: " + parrainDto.getNomUtilisateur());
+        ParrainDto dto = (ParrainDto) super.toDto(entity);
 
         // Mapper les propriétés spécifiques à Parrain
-        parrainDto.setPresentationParcours(parrain.getPresentationParcours());
-        parrainDto.setBranchesReseau(parrain.getBranchesReseau());
-        parrainDto.setDomainesExpertise(parrain.getDomainesExpertise());
-        parrainDto.setSecteurGeographique(parrain.getSecteurGeographique());
-        parrainDto.setDisponibilites(parrain.getDisponibilites());
+        dto.setPresentationParcours(entity.getPresentationParcours());
+        dto.setBranchesReseau(entity.getBranchesReseau());
+        dto.setDomainesExpertise(entity.getDomainesExpertise());
+        dto.setSecteurGeographique(entity.getSecteurGeographique());
+        dto.setDisponibilites(entity.getDisponibilites());
 
-        return parrainDto;
+        return dto;
     }
+
+    @Override
+    public UtilisateurDto toDto(Utilisateur parrain) {
+        return this.toParrainDto((Parrain) parrain);
+    }
+
+    public Utilisateur toEntity(UtilisateurDto parrainDto) {
+        return this.toParrainEntity((ParrainDto) parrainDto);
+    }
+
 
     /**
      * Convertit un DTO ParrainDto en une entité Parrain.
+     *
      * @param parrainDto Le DTO à convertir.
      * @return Une entité Parrain.
      */
-    public Parrain toEntity(ParrainDto parrainDto, Parrain parrainExistant, List<TypeAccompagnementDto> accompagnements, List<SecteurReseauDto> secteursReseaux) {
+    private Parrain toParrainEntity(ParrainDto parrainDto) {
         if (parrainDto == null) {
             return null;
         }
 
-        // Convertir le DTO en entité
-        Parrain parrain = parrainExistant != null ? parrainExistant : new Parrain();
-
         // Mapper les propriétés héritées de la classe Utilisateur
-        // pas nécessaire : cause d'erreur
-
+        Parrain parrain = (Parrain) super.toEntity(parrainDto);
 
         // Mapper les propriétés spécifiques à Parrain
         parrain.setPresentationParcours(parrainDto.getPresentationParcours());
